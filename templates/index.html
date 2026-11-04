@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>육군학생군사학교 문무대교회 | 조국 수호와 청년 복음화의 요람</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              800: '#142548',
+              900: '#0f1d38',
+              950: '#080f1e',
+            },
+            gold: {
+              400: '#f5d77f',
+              500: '#c59b27',
+              600: '#aa7c11',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#faf9f6] text-gray-800 antialiased flex flex-col min-h-screen">
+
+  <!-- 1. 최상단 긴급 공지 & 오늘의 말씀 티커 -->
+  <div class="bg-navy-950 text-gold-400 py-2 px-4 text-xs sm:text-sm font-medium border-b border-navy-800 flex justify-between items-center">
+    <div class="container mx-auto flex flex-wrap justify-between items-center px-4">
+      <div class="flex items-center gap-2">
+        <span class="bg-gold-500/20 text-gold-400 text-xs px-2 py-0.5 rounded border border-gold-500/40 font-bold">오늘의 말씀</span>
+        <span class="text-gray-300 truncate">“너는 청년의 때에 너의 창조주를 기억하라” (전도서 12:1)</span>
+      </div>
+      <div class="hidden md:flex items-center gap-4 text-gray-400 text-xs">
+        <span><i class="fa-solid fa-location-dot text-gold-500 mr-1"></i> 충북 괴산군 괴산읍 문무로 177 영내</span>
+        <span><i class="fa-solid fa-phone text-gold-500 mr-1"></i> 군종실 043-830-1004</span>
+        <a href="/admin" class="hover:text-gold-400 transition ml-2 border-l border-gray-700 pl-3"><i class="fa-solid fa-lock text-xs mr-1"></i>관리자</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 메인 글로벌 내비게이션 바 -->
+  <nav id="main-nav" class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200 transition-all duration-300">
+    <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center h-20">
+      <!-- 로고 -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-full bg-navy-900 text-gold-400 flex items-center justify-center text-xl shadow-md border border-gold-500/30 group-hover:scale-105 transition">
+          <i class="fa-solid fa-cross"></i>
+        </div>
+        <div>
+          <span class="text-xs font-semibold tracking-wider text-navy-800 uppercase block">Republic of Korea Army Cadet Military School</span>
+          <span class="text-xl font-bold text-navy-950 tracking-tight font-serif-kr flex items-center gap-2">
+            문무대교회
+            <span class="text-xs bg-navy-800 text-gold-400 px-2 py-0.5 rounded-full font-normal">육군학생군사학교</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- 데스크톱 메뉴 -->
+      <div class="hidden lg:flex items-center gap-8 font-medium text-gray-700 text-sm">
+        <a href="/" class="text-navy-900 font-bold border-b-2 border-gold-500 pb-1">홈</a>
+        <a href="/about" class="hover:text-gold-600 transition">교회소개 & 연혁</a>
+        <a href="#sermon-section" class="hover:text-gold-600 transition">예배 & 말씀</a>
+        <a href="/counseling" class="hover:text-gold-600 transition flex items-center gap-1.5 text-navy-900 font-semibold bg-gold-400/10 px-3 py-1.5 rounded-full border border-gold-500/20">
+          <i class="fa-regular fa-calendar-check text-gold-600"></i> 목양상담 접수
+        </a>
+        <a href="/events" class="hover:text-gold-600 transition">행사 & 진중세례</a>
+        <a href="/consolation" class="hover:text-gold-600 transition">위문 신청</a>
+        <a href="/virtual-space" class="hover:text-gold-600 transition flex items-center gap-1 text-purple-700 font-semibold">
+          <i class="fa-solid fa-vr-cardboard"></i> 3D 가상목양실
+        </a>
+        <a href="/donation" class="hover:text-gold-600 transition">후원 안내</a>
+      </div>
+
+      <!-- 우측 빠른 CTA -->
+      <div class="hidden lg:flex items-center gap-3">
+        <a href="/counseling" class="bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow transition flex items-center gap-2 border border-gold-500/30">
+          <i class="fa-solid fa-comment-dots text-gold-400"></i>
+          <span>1:1 상담 예약</span>
+        </a>
+      </div>
+
+      <!-- 모바일 햄버거 버튼 -->
+      <button id="mobile-menu-btn" class="lg:hidden text-navy-900 text-2xl focus:outline-none">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+
+    <!-- 모바일 드롭다운 메뉴 -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-gray-200 px-6 py-4 space-y-3 text-sm">
+      <a href="/" class="block font-bold text-navy-900 py-1">홈</a>
+      <a href="/about" class="block text-gray-700 py-1">교회소개 & 연혁</a>
+      <a href="#sermon-section" class="block text-gray-700 py-1">예배 & 말씀</a>
+      <a href="/counseling" class="block text-gold-600 font-semibold py-1">목양상담 접수 (구글캘린더 연동)</a>
+      <a href="/events" class="block text-gray-700 py-1">행사 & 진중세례</a>
+      <a href="/consolation" class="block text-gray-700 py-1">위문 신청 (중복 일정 방지)</a>
+      <a href="/virtual-space" class="block text-purple-700 font-semibold py-1">3D 가상 목양실</a>
+      <a href="/donation" class="block text-gray-700 py-1">후원 안내 & 입금 알림</a>
+      <div class="pt-2 border-t border-gray-100 flex gap-2">
+        <a href="/counseling" class="flex-1 bg-navy-900 text-white text-center py-2 rounded text-xs">상담 신청</a>
+        <a href="/admin" class="px-3 py-2 bg-gray-100 text-gray-700 rounded text-xs">관리자</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 3. 메인 히어로 섹션 (웅장한 교회 본당 & 십자가 느낌) -->
+  <section class="relative bg-navy-950 text-white min-h-[620px] flex items-center overflow-hidden">
+    <!-- 배경 이미지 오버레이 (성스러운 대성전과 십자가) -->
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1548625361-195fe5795df5?auto=format&fit=crop&w=2000&q=80" 
+           alt="문무대교회 대성전 전경" 
+           class="w-full h-full object-cover object-center opacity-30 filter brightness-90">
+      <div class="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/85 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-navy-950 via-transparent to-transparent"></div>
+    </div>
+
+    <div class="container mx-auto px-4 lg:px-8 relative z-10 py-20">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-500/20 border border-gold-400/40 text-gold-300 text-xs sm:text-sm font-medium mb-6">
+          <i class="fa-solid fa-shield-halved text-gold-400"></i>
+          <span>대한민국 육군학생군사학교 영내 군종교회</span>
+        </div>
+        
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight font-serif-kr leading-tight mb-4 text-white">
+          청년 장교의 가슴마다<br>
+          <span class="gold-text-gradient">그리스도를 품게 하소서</span>
+        </h1>
+        
+        <p class="text-base sm:text-lg text-gray-300 font-normal leading-relaxed mb-8">
+          조국 수호의 최전선으로 나아갈 학군사관(ROTC)·학사장교 후보생들과 국군 장병들에게<br class="hidden sm:inline">
+          영적 전신갑주를 입히고 하나님의 거룩한 비전을 심는 복음의 요람, 문무대교회입니다.
+        </p>
+
+        <!-- CTA 버튼 그룹 -->
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="/counseling" class="gold-gradient hover:opacity-90 text-navy-950 font-bold px-6 py-3.5 rounded-xl shadow-lg transition flex items-center gap-2.5">
+            <i class="fa-solid fa-calendar-check text-lg"></i>
+            <span>군종목사 상담 예약</span>
+          </a>
+          <a href="#bulletin-section" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3.5 rounded-xl backdrop-blur transition flex items-center gap-2">
+            <i class="fa-regular fa-newspaper text-gold-400"></i>
+            <span>이번 주 스마트 주보</span>
+          </a>
+          <a href="/virtual-space" class="bg-purple-900/40 hover:bg-purple-900/60 text-purple-200 border border-purple-400/30 px-5 py-3.5 rounded-xl backdrop-blur transition flex items-center gap-2">
+            <i class="fa-solid fa-cube text-purple-300"></i>
+            <span>3D 가상 목양실 투어</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 주간 정기 예배 시간표 안내 바 (교회 필수 정보) -->
+  <section class="bg-white border-b border-gray-200 shadow-sm relative z-20 -mt-6 mx-4 lg:mx-8 rounded-2xl p-6 lg:p-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between pb-4 border-b border-gray-100 gap-4 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gold-500/10 text-gold-600 flex items-center justify-center text-xl font-bold">
+            <i class="fa-regular fa-clock"></i>
+          </div>
+          <div>
+            <h2 class="text-lg font-bold text-navy-950 font-serif-kr">문무대교회 정기 예배 안내</h2>
+            <p class="text-xs text-gray-500">대성전(1,200석) 및 비전홀에서 장엄하고 은혜로운 예배가 드려집니다</p>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
+          <i class="fa-solid fa-circle-info text-blue-500 mr-1"></i> 훈련기간 중 주일 2부는 후보생 연합예배로 진행됩니다
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <!-- 주일 1부 -->
+        <div class="p-4 rounded-xl bg-gray-50 hover:bg-gold-50/50 border border-gray-100 transition">
+          <span class="inline-block px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-800 mb-2">장병 및 가족</span>
+          <div class="font-bold text-gray-900 text-base">주일 1부 예배</div>
+          <div class="text-xl font-extrabold text-navy-900 mt-1">주일 09:00</div>
+          <div class="text-xs text-gray-500 mt-1">대성전 (본당)</div>
+        </div>
+
+        <!-- 주일 2부 후보생 -->
+        <div class="p-4 rounded-xl bg-navy-900 text-white shadow-md border border-gold-500/30 transition relative overflow-hidden">
+          <div class="absolute top-0 right-0 bg-gold-500 text-navy-950 text-[10px] font-bold px-2 py-0.5 rounded-bl">중점 사역</div>
+          <span class="inline-block px-2.5 py-0.5 rounded text-xs font-semibold bg-gold-400 text-navy-950 mb-2">ROTC·학사 훈련생</span>
+          <div class="font-bold text-white text-base">주일 2부 연합예배</div>
+          <div class="text-xl font-extrabold text-gold-400 mt-1">주일 10:30</div>
+          <div class="text-xs text-gray-300 mt-1">대성전 (전 후보생 참여)</div>
+        </div>
+
+        <!-- 수요 찬양 -->
+        <div class="p-4 rounded-xl bg-gray-50 hover:bg-gold-50/50 border border-gray-100 transition">
+          <span class="inline-block px-2.5 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-800 mb-2">찬양 & 말씀</span>
+          <div class="font-bold text-gray-900 text-base">수요 찬양기도회</div>
+          <div class="text-xl font-extrabold text-navy-900 mt-1">수요일 19:30</div>
+          <div class="text-xs text-gray-500 mt-1">비전홀 (소예배실)</div>
+        </div>
+
+        <!-- 금요 심야기도회 -->
+        <div class="p-4 rounded-xl bg-gray-50 hover:bg-gold-50/50 border border-gray-100 transition">
+          <span class="inline-block px-2.5 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-800 mb-2">뜨거운 부르짖음</span>
+          <div class="font-bold text-gray-900 text-base">금요 심야기도회</div>
+          <div class="text-xl font-extrabold text-navy-900 mt-1">금요일 20:00</div>
+          <div class="text-xs text-gray-500 mt-1">대성전 기도처</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 6대 핵심 서비스 빠른 바로가기 카드 -->
+  <section class="py-14 bg-[#faf9f6]">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <h2 class="text-2xl sm:text-3xl font-bold text-navy-950 font-serif-kr">성도 및 후보생을 위한 온라인 사역</h2>
+        <p class="text-gray-600 text-sm mt-2">문무대교회는 언제 어디서나 장병과 동행하며 영적 회복을 지원합니다</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 1. 상담 예약 -->
+        <a href="/counseling" class="group bg-white p-6 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-xl hover:border-gold-500/50 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+          </div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-lg font-bold text-gray-900 group-hover:text-navy-900">목양상담 신청</h3>
+            <span class="text-xs text-blue-600 font-semibold bg-blue-50 px-2 py-0.5 rounded">구글 캘린더 연동</span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed mb-4">군 생활, 진로, 신앙 고충을 군종목사님과 1:1로 나누세요. 철저한 비밀보장 모드를 지원합니다.</p>
+          <div class="text-xs font-bold text-navy-900 flex items-center gap-1 group-hover:translate-x-1 transition">
+            <span>상담 시간표 확인하기</span> <i class="fa-solid fa-arrow-right text-gold-500"></i>
+          </div>
+        </a>
+
+        <!-- 2. 위문 신청 -->
+        <a href="/consolation" class="group bg-white p-6 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-xl hover:border-gold-500/50 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-amber-600 group-hover:text-white transition">
+            <i class="fa-solid fa-people-roof"></i>
+          </div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-lg font-bold text-gray-900 group-hover:text-navy-900">외부 위문 신청</h3>
+            <span class="text-xs text-amber-600 font-semibold bg-amber-50 px-2 py-0.5 rounded">일정 중복방지</span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed mb-4">전국 교회, 동문회, 선교단체의 훈련 후보생 간식 위문 및 예배 방문 일정을 중복 없이 접수합니다.</p>
+          <div class="text-xs font-bold text-navy-900 flex items-center gap-1 group-hover:translate-x-1 transition">
+            <span>위문 캘린더 바로가기</span> <i class="fa-solid fa-arrow-right text-gold-500"></i>
+          </div>
+        </a>
+
+        <!-- 3. 행사 & 진중세례 -->
+        <a href="/events" class="group bg-white p-6 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-xl hover:border-gold-500/50 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition">
+            <i class="fa-solid fa-water"></i>
+          </div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-lg font-bold text-gray-900 group-hover:text-navy-900">행사 & 진중세례식</h3>
+            <span class="text-xs text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded">참가 접수중</span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed mb-4">하계·동계 입영훈련 진중세례 및 찬양의 밤 행사 일정을 확인하고 온라인으로 신청하세요.</p>
+          <div class="text-xs font-bold text-navy-900 flex items-center gap-1 group-hover:translate-x-1 transition">
+            <span>진중세례 및 행사 안내</span> <i class="fa-solid fa-arrow-right text-gold-500"></i>
+          </div>
+        </a>
+
+        <!-- 4. 3D 가상 목양실 -->
+        <a href="/virtual-space" class="group bg-white p-6 rounded-2xl border border-purple-200/80 shadow-sm hover:shadow-xl hover:border-purple-500/50 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition">
+            <i class="fa-solid fa-vr-cardboard"></i>
+          </div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-lg font-bold text-gray-900 group-hover:text-purple-900">3D 가상 목양실</h3>
+            <span class="text-xs text-purple-600 font-semibold bg-purple-50 px-2 py-0.5 rounded">메타버스 체험</span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed mb-4">브라우저에서 360도로 목양실을 둘러보며 성경 말씀, 기도우체통, 찬양 BGM을 인터랙티브하게 체험하세요.</p>
+          <div class="text-xs font-bold text-purple-800 flex items-center gap-1 group-hover:translate-x-1 transition">
+            <span>가상공간 입장하기</span> <i class="fa-solid fa-arrow-right text-purple-600"></i>
+          </div>
+        </a>
+
+        <!-- 5. 훈련생 응원 편지함 -->
+        <div class="group bg-white p-6 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-xl hover:border-gold-500/50 transition-all duration-300 cursor-pointer" onclick="openLetterModal()">
+          <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-rose-600 group-hover:text-white transition">
+            <i class="fa-solid fa-envelope-open-text"></i>
+          </div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-lg font-bold text-gray-900 group-hover:text-navy-900">훈련생 응원 기도편지</h3>
+            <span class="text-xs text-rose-600 font-semibold bg-rose-50 px-2 py-0.5 rounded">주일 전달</span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed mb-4">입영훈련 중인 아들, 딸, 후배 장교 후보생에게 가족과 친지의 따뜻한 사랑과 기도제목을 전해주세요.</p>
+          <div class="text-xs font-bold text-navy-900 flex items-center gap-1 group-hover:translate-x-1 transition">
+            <span>응원 편지 남기기</span> <i class="fa-solid fa-arrow-right text-gold-500"></i>
+          </div>
+        </div>
+
+        <!-- 6. 후원 안내 & 입금 알림 -->
+        <a href="/donation" class="group bg-white p-6 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-xl hover:border-gold-500/50 transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-gold-50 text-gold-600 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 group-hover:bg-gold-600 group-hover:text-white transition">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="text-lg font-bold text-gray-900 group-hover:text-navy-900">군선교 후원 안내</h3>
+            <span class="text-xs text-gold-600 font-semibold bg-gold-50 px-2 py-0.5 rounded">실시간 알림 연동</span>
+          </div>
+          <p class="text-sm text-gray-500 leading-relaxed mb-4">청년 장교 복음화와 진중세례를 위한 후원 계좌를 복사하고, 입금 시 목사님께 실시간 알림을 보냅니다.</p>
+          <div class="text-xs font-bold text-navy-900 flex items-center gap-1 group-hover:translate-x-1 transition">
+            <span>계좌 확인 & 입금 알림</span> <i class="fa-solid fa-arrow-right text-gold-500"></i>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 최신 주일 설교 영상 & 스마트 주보 섹션 (사용자 필수 요구사항 3번) -->
+  <section id="sermon-section" class="py-16 bg-white border-t border-b border-gray-200">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="flex flex-col lg:flex-row gap-12 items-start">
+        
+        <!-- 좌측: 최신 주일 설교 유튜브 플레이어 -->
+        <div class="w-full lg:w-7/12">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping"></span>
+            <span class="text-xs font-bold text-red-600 uppercase tracking-wider">Latest Sunday Sermon</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-navy-950 font-serif-kr mb-2">주일 설교 말씀</h2>
+          <p class="text-sm text-gray-500 mb-6">청년 장교들의 영적 비전을 깨우는 문무대교회의 주일 선포 말씀입니다</p>
+
+          <!-- 반응형 16:9 유튜브 비디오 임베드 -->
+          <div class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black border border-gray-200">
+            <iframe id="sermon-video-frame" 
+                    class="w-full h-full" 
+                    src="https://www.youtube.com/embed/W5qM9uA_g28" 
+                    title="문무대교회 주일설교" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+            </iframe>
+          </div>
+
+          <!-- 설교 정보 카드 -->
+          <div class="mt-4 p-5 bg-gray-50 rounded-xl border border-gray-200">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span class="text-xs font-semibold px-2.5 py-1 rounded bg-navy-900 text-gold-400">주일 2부 후보생 연합예배</span>
+              <span class="text-xs text-gray-500"><i class="fa-regular fa-calendar mr-1"></i> 2026년 11월 1일 선포</span>
+            </div>
+            <h3 class="text-xl font-bold text-navy-950 mb-1">“청년의 때에 여호와를 기억하라”</h3>
+            <p class="text-sm font-semibold text-gold-600 mb-2">본문: 전도서 12장 1-2절 | 설교자: 김요한 군종목사</p>
+            <p class="text-xs text-gray-600 leading-relaxed">
+              군 복무와 훈련이라는 광야 속에서 흔들리지 않는 영적 나침반을 세우며, 야전으로 파송될 청년 장교로서 하나님을 의지하는 믿음의 결단에 대한 말씀입니다.
+            </p>
+          </div>
+        </div>
+
+        <!-- 우측: 이번 주 스마트 주보 (PDF/이미지 뷰어) -->
+        <div id="bulletin-section" class="w-full lg:w-5/12">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-bold text-navy-900 uppercase tracking-wider">Weekly Bulletin</span>
+            <span class="text-xs bg-gold-100 text-gold-800 font-bold px-2 py-0.5 rounded">제2026-44호</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-bold text-navy-950 font-serif-kr mb-2">이번 주 스마트 주보</h2>
+          <p class="text-sm text-gray-500 mb-6">스마트폰에서도 선명하게 넘겨보는 디지털 주보입니다</p>
+
+          <div class="bg-navy-950 rounded-2xl p-4 shadow-xl border border-gray-800 text-white">
+            <div class="relative rounded-xl overflow-hidden group cursor-pointer" onclick="openBulletinModal()">
+              <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80" 
+                   alt="문무대교회 주보 표지" 
+                   class="w-full h-72 object-cover object-top rounded-xl group-hover:scale-105 transition duration-500">
+              <div class="absolute inset-0 bg-navy-950/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center gap-2">
+                <span class="bg-gold-500 text-navy-950 px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-1.5 shadow">
+                  <i class="fa-solid fa-magnifying-glass-plus"></i> 큰 화면으로 주보 보기
+                </span>
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between pt-2 border-t border-gray-800">
+              <div>
+                <div class="font-bold text-sm text-white">2026년 11월 첫째 주일 주보</div>
+                <div class="text-xs text-gray-400 mt-0.5">예배 순서 / 목회 소식 / 훈련 일정 안내</div>
+              </div>
+              <button onclick="openBulletinModal()" class="px-3 py-1.5 rounded-lg bg-gold-500/20 text-gold-400 hover:bg-gold-500 hover:text-navy-950 text-xs font-semibold transition border border-gold-500/40">
+                주보 열기
+              </button>
+            </div>
+          </div>
+
+          <!-- 주보 주요 소식 요약 카드 -->
+          <div class="mt-4 p-4 rounded-xl border border-gray-200 bg-white shadow-sm space-y-2 text-xs">
+            <div class="font-bold text-gray-900 flex items-center gap-1.5 text-sm">
+              <i class="fa-solid fa-bullhorn text-gold-600"></i> 주보 주요 알림
+            </div>
+            <p class="text-gray-600">• <strong>하계 ROTC 진중세례식:</strong> 11월 22일(주일) 14:00 대성전</p>
+            <p class="text-gray-600">• <strong>상담 신청 안내:</strong> 일과 후 및 주말 목양상담 사전 예약 가능</p>
+            <p class="text-gray-600">• <strong>기독 간부 모임:</strong> 매주 화요일 12:00 비전홀 오찬 기도회</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 교회 연혁 및 역사 하이라이트 (사용자 강조: 연혁 포함!) -->
+  <section class="py-16 bg-[#faf9f6]">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="text-xs font-bold text-gold-600 uppercase tracking-widest block mb-1">Our Proud Heritage</span>
+          <h2 class="text-2xl sm:text-4xl font-bold text-navy-950 font-serif-kr">문무대교회 40년 선교 발자취</h2>
+          <p class="text-sm text-gray-600 mt-2">1985년 학생중앙군사학교 성남 시절부터 오늘날 충북 괴산 성전에 이르기까지</p>
+        </div>
+        <a href="/about" class="mt-4 md:mt-0 text-sm font-bold text-navy-900 hover:text-gold-600 flex items-center gap-1 transition">
+          전체 연혁 및 상세 소개 <i class="fa-solid fa-chevron-right text-xs text-gold-500"></i>
+        </a>
+      </div>
+
+      <!-- 타임라인 카드 그리드 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+        <!-- 1985 -->
+        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative hover:-translate-y-1 transition duration-300">
+          <div class="text-3xl font-extrabold text-gold-500 font-serif-kr mb-2">1985</div>
+          <h3 class="text-lg font-bold text-navy-950 mb-2">군종 선교의 태동 (성남 시대)</h3>
+          <p class="text-xs text-gray-600 leading-relaxed mb-4">
+            경기도 성남 학생중앙군사학교 창설과 함께 장교 후보생들을 향한 영적 돌봄과 청년 복음화의 첫 등불을 밝혔습니다.
+          </p>
+          <div class="text-[11px] text-gray-400 border-t border-gray-100 pt-3">
+            <i class="fa-regular fa-calendar-check mr-1"></i> ROTC 기독장교 사역 시작
+          </div>
+        </div>
+
+        <!-- 2011 -->
+        <div class="bg-navy-900 text-white p-6 rounded-2xl border border-gold-500/40 shadow-xl relative hover:-translate-y-1 transition duration-300">
+          <div class="text-3xl font-extrabold text-gold-400 font-serif-kr mb-2">2011</div>
+          <h3 class="text-lg font-bold text-white mb-2">괴산 이전 & 대성전 헌당</h3>
+          <p class="text-xs text-gray-300 leading-relaxed mb-4">
+            충북 괴산 신축 캠퍼스로 전면 이전하며, 1,200석 규모의 현대식 대예배실과 비전홀을 갖춘 거룩한 새 성전을 헌당하였습니다.
+          </p>
+          <div class="text-[11px] text-gold-300 border-t border-navy-800 pt-3">
+            <i class="fa-regular fa-calendar-check mr-1"></i> 대한민국 육군 초급장교 선교 요충지 확립
+          </div>
+        </div>
+
+        <!-- 2026 -->
+        <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm relative hover:-translate-y-1 transition duration-300">
+          <div class="text-3xl font-extrabold text-gold-500 font-serif-kr mb-2">현재</div>
+          <h3 class="text-lg font-bold text-navy-950 mb-2">조국 수호와 차세대 리더 양성</h3>
+          <p class="text-xs text-gray-600 leading-relaxed mb-4">
+            연간 수천 명의 ROTC 및 학사장교 후보생이 거쳐가는 문무대에서 진중세례와 영성 훈련을 통해 기독 정예장교를 세우고 있습니다.
+          </p>
+          <div class="text-[11px] text-gray-400 border-t border-gray-100 pt-3">
+            <i class="fa-regular fa-calendar-check mr-1"></i> 스마트 군선교 및 핫라인 상담 정착
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 시설 및 사역 사진 갤러리 (사용자 강조: 사진 포함!) -->
+  <section class="py-16 bg-white border-t border-gray-200">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-gold-600 uppercase tracking-widest block mb-1">Photo Gallery</span>
+        <h2 class="text-2xl sm:text-4xl font-bold text-navy-950 font-serif-kr">문무대교회 시설 및 사역 현장</h2>
+        <p class="text-sm text-gray-600 mt-2">은혜와 감동이 살아 숨 쉬는 대성전과 뜨거운 예배의 순간들입니다</p>
+      </div>
+
+      <!-- 갤러리 이미지 그리드 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 사진 1: 대성전 -->
+        <div class="zoom-card group relative rounded-2xl overflow-hidden shadow-md bg-navy-950 aspect-[4/3]">
+          <img src="https://images.unsplash.com/photo-1548625361-195fe5795df5?auto=format&fit=crop&w=800&q=80" 
+               alt="대성전 전경" 
+               class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent opacity-90 group-hover:opacity-100 transition p-6 flex flex-col justify-end text-white">
+            <span class="text-xs text-gold-400 font-semibold mb-1">시설 전경</span>
+            <h4 class="font-bold text-base">문무대교회 1,200석 대성전</h4>
+            <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">괴산 문무대 영내에 웅장하게 자리한 예배의 처소</p>
+          </div>
+        </div>
+
+        <!-- 사진 2: 진중세례식 -->
+        <div class="zoom-card group relative rounded-2xl overflow-hidden shadow-md bg-navy-950 aspect-[4/3]">
+          <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=800&q=80" 
+               alt="진중세례식" 
+               class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent opacity-90 group-hover:opacity-100 transition p-6 flex flex-col justify-end text-white">
+            <span class="text-xs text-gold-400 font-semibold mb-1">사역 현장</span>
+            <h4 class="font-bold text-base">하계 입영훈련 진중세례식</h4>
+            <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">그리스도를 구주로 고백하는 거룩한 세례의 은혜</p>
+          </div>
+        </div>
+
+        <!-- 사진 3: 후보생 찬양 연합예배 -->
+        <div class="zoom-card group relative rounded-2xl overflow-hidden shadow-md bg-navy-950 aspect-[4/3]">
+          <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80" 
+               alt="찬양 연합예배" 
+               class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent opacity-90 group-hover:opacity-100 transition p-6 flex flex-col justify-end text-white">
+            <span class="text-xs text-gold-400 font-semibold mb-1">주일 예배</span>
+            <h4 class="font-bold text-base">ROTC 후보생 연합 찬양의 밤</h4>
+            <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">청년들의 뜨거운 찬양과 기도로 가득 찬 본당</p>
+          </div>
+        </div>
+
+        <!-- 사진 4: 야외 십자가 동산 -->
+        <div class="zoom-card group relative rounded-2xl overflow-hidden shadow-md bg-navy-950 aspect-[4/3]">
+          <img src="https://images.unsplash.com/photo-1519491050282-cf00c82424b4?auto=format&fit=crop&w=800&q=80" 
+               alt="야외 십자가 기도동산" 
+               class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent opacity-90 group-hover:opacity-100 transition p-6 flex flex-col justify-end text-white">
+            <span class="text-xs text-gold-400 font-semibold mb-1">기도 처소</span>
+            <h4 class="font-bold text-base">야외 십자가 동산 및 묵상 산책로</h4>
+            <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">고요함 가운데 주님과 깊이 만나는 산책로</p>
+          </div>
+        </div>
+
+        <!-- 사진 5: 위문 행사 -->
+        <div class="zoom-card group relative rounded-2xl overflow-hidden shadow-md bg-navy-950 aspect-[4/3]">
+          <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80" 
+               alt="위문 교제 현장" 
+               class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent opacity-90 group-hover:opacity-100 transition p-6 flex flex-col justify-end text-white">
+            <span class="text-xs text-gold-400 font-semibold mb-1">사랑의 나눔</span>
+            <h4 class="font-bold text-base">후원교회 위문 및 간식 전달식</h4>
+            <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">어머니의 손길처럼 따뜻한 격려와 사랑</p>
+          </div>
+        </div>
+
+        <!-- 사진 6: 친교 카페 -->
+        <div class="zoom-card group relative rounded-2xl overflow-hidden shadow-md bg-navy-950 aspect-[4/3]">
+          <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80" 
+               alt="친교 카페" 
+               class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-navy-950/90 via-navy-950/30 to-transparent opacity-90 group-hover:opacity-100 transition p-6 flex flex-col justify-end text-white">
+            <span class="text-xs text-gold-400 font-semibold mb-1">성도 교제</span>
+            <h4 class="font-bold text-base">만남의 광장 친교 카페</h4>
+            <p class="text-xs text-gray-300 line-clamp-1 mt-0.5">예배 후 따뜻한 차와 사랑의 교제를 나누는 열린 쉼터</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. 오시는 길 및 부대 출입(위병소) 안내 -->
+  <section class="py-16 bg-[#faf9f6]">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="bg-white rounded-3xl p-8 lg:p-12 border border-gray-200 shadow-sm flex flex-col lg:flex-row gap-8 items-center">
+        <div class="w-full lg:w-1/2">
+          <span class="text-xs font-bold text-gold-600 uppercase tracking-widest block mb-2">Location & Security</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-navy-950 font-serif-kr mb-4">오시는 길 & 부대 출입 안내</h2>
+          <p class="text-sm text-gray-600 leading-relaxed mb-6">
+            문무대교회는 군사보호구역인 육군학생군사학교 영내에 위치하고 있습니다. 외부 성도 및 위문 방문객께서는 위병소 출입 절차를 확인해 주시기 바랍니다.
+          </p>
+
+          <div class="space-y-4 text-sm">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-navy-900 text-gold-400 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-location-dot"></i>
+              </div>
+              <div>
+                <span class="font-bold text-gray-900 block">주소지</span>
+                <span class="text-gray-600">충청북도 괴산군 괴산읍 문무로 177 육군학생군사학교 영내 문무대교회</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-navy-900 text-gold-400 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-id-card"></i>
+              </div>
+              <div>
+                <span class="font-bold text-gray-900 block">위병소 출입 안내</span>
+                <span class="text-gray-600">주일 정기예배 참석자는 신분증(주민등록증/운전면허증) 지참 후 위병소에서 '교회 방문' 확인 후 출입 가능합니다.</span>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 rounded-lg bg-navy-900 text-gold-400 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-bus"></i>
+              </div>
+              <div>
+                <span class="font-bold text-gray-900 block">단체 위문 차량</span>
+                <span class="text-gray-600">위문 단체의 경우 최소 3일 전 본 홈페이지 '위문 신청'을 통해 차량번호와 탑승 인원을 등록하셔야 합니다.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a href="https://map.kakao.com/link/search/육군학생군사학교" target="_blank" class="px-4 py-2.5 rounded-xl bg-yellow-400 text-gray-900 font-bold text-xs hover:bg-yellow-500 transition flex items-center gap-2">
+              <i class="fa-solid fa-map-location-dot"></i> 카카오맵 길찾기
+            </a>
+            <a href="https://map.naver.com/p/search/육군학생군사학교" target="_blank" class="px-4 py-2.5 rounded-xl bg-green-600 text-white font-bold text-xs hover:bg-green-700 transition flex items-center gap-2">
+              <i class="fa-solid fa-map"></i> 네이버 지도 길찾기
+            </a>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2">
+          <div class="rounded-2xl overflow-hidden border border-gray-200 shadow-md aspect-video relative bg-gray-100">
+            <!-- 군부대 지도 안내 그래픽 이미지 -->
+            <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80" 
+                 alt="문무대 위치 지도" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-navy-950/40 flex items-center justify-center">
+              <div class="bg-white/95 backdrop-blur px-6 py-4 rounded-2xl shadow-xl text-center">
+                <i class="fa-solid fa-cross text-2xl text-gold-600 mb-1"></i>
+                <div class="font-bold text-navy-950 text-sm">육군학생군사학교 문무대교회</div>
+                <div class="text-xs text-gray-500 mt-1">충북 괴산군 괴산읍 문무로 177</div>
+                <div class="text-[11px] text-blue-600 font-semibold mt-2">정문 위병소 통과 후 안내 표지판 300m</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. 푸터 -->
+  <footer class="bg-navy-950 text-gray-400 text-xs py-12 border-t border-navy-900 mt-auto">
+    <div class="container mx-auto px-4 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-navy-900">
+        
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-2 text-white font-serif-kr text-lg font-bold mb-3">
+            <i class="fa-solid fa-cross text-gold-400"></i> 육군학생군사학교 문무대교회
+          </div>
+          <p class="text-gray-400 leading-relaxed max-w-md text-xs mb-4">
+            문무대교회는 대한민국 국방의 초석이 될 청년 장교들과 훈련 후보생들의 영혼을 지키고 세우는 거룩한 군선교의 방파제입니다.
+          </p>
+          <div class="text-gray-400 space-y-1 text-xs">
+            <p>충청북도 괴산군 괴산읍 문무로 177 사서함 100호 육군학생군사학교 군종실</p>
+            <p>담임 군종목사: 김요한 소령(진) | 군종실 행정실: 043-830-1004</p>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold text-sm mb-3">빠른 메뉴</h4>
+          <ul class="space-y-2">
+            <li><a href="/about" class="hover:text-gold-400 transition">교회 소개 & 연혁</a></li>
+            <li><a href="/counseling" class="hover:text-gold-400 transition">목양상담 예약</a></li>
+            <li><a href="/events" class="hover:text-gold-400 transition">행사 & 진중세례</a></li>
+            <li><a href="/consolation" class="hover:text-gold-400 transition">위문 신청</a></li>
+            <li><a href="/virtual-space" class="hover:text-gold-400 transition">3D 가상 목양실</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-white font-bold text-sm mb-3">군선교 헌금 계좌</h4>
+          <div class="bg-navy-900 p-3 rounded-xl border border-navy-800 space-y-2">
+            <div class="text-gray-300 font-semibold text-xs">농협은행</div>
+            <div class="text-gold-400 font-mono font-bold text-sm select-all">301-0284-5912-71</div>
+            <div class="text-[11px] text-gray-400">예금주: 문무대교회</div>
+            <button onclick="copyAccount('301-0284-5912-71', '농협')" class="w-full mt-1 bg-navy-800 hover:bg-navy-700 text-gold-400 py-1 rounded text-[11px] font-semibold transition border border-gold-500/20">
+              계좌번호 복사
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-500 text-[11px]">
+        <div>© 2026 Republic of Korea Army Cadet Military School Church. All Rights Reserved.</div>
+        <div class="flex items-center gap-4">
+          <a href="/admin" class="hover:text-gray-400 transition"><i class="fa-solid fa-lock text-xs mr-1"></i>군종행정 관리자 로그인</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 스마트 주보 모달 다이얼로그 -->
+  <div id="bulletin-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="bg-white w-full max-w-4xl rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+      <div class="bg-navy-950 text-white p-4 flex justify-between items-center border-b border-navy-800">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-newspaper text-gold-400"></i>
+          <span class="font-bold text-sm">문무대교회 스마트 주보 (제2026-44호)</span>
+        </div>
+        <button onclick="closeBulletinModal()" class="text-gray-400 hover:text-white text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-4 overflow-y-auto flex-1 bg-gray-100 flex flex-col items-center">
+        <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80" 
+             alt="주보 고화질 이미지" 
+             class="w-full max-w-2xl rounded-lg shadow-md mb-4">
+        <div class="bg-white p-6 rounded-xl shadow w-full max-w-2xl text-sm space-y-4">
+          <div class="border-b pb-3">
+            <h4 class="font-bold text-navy-950 text-base">주일 예배 순서 (2026년 11월 1일)</h4>
+            <p class="text-xs text-gray-500">인도: 김요한 군종목사 | 찬양: 문무대 찬양팀</p>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex justify-between py-1 border-b border-gray-100">
+              <span class="font-semibold text-gray-700">예배의 부름</span>
+              <span class="text-gray-500">인도자</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-gray-100">
+              <span class="font-semibold text-gray-700">찬송</span>
+              <span class="text-gray-500">통일찬송가 358장 (주의 진리 위해 십자가 군기)</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-gray-100">
+              <span class="font-semibold text-gray-700">대표기도</span>
+              <span class="text-gray-500">ROTC 후보생 대표</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-gray-100">
+              <span class="font-semibold text-gray-700">성경봉독</span>
+              <span class="text-gray-500">전도서 12장 1-2절</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-gray-100">
+              <span class="font-semibold text-gray-700">말씀선포</span>
+              <span class="font-bold text-navy-900">“청년의 때에 여호와를 기억하라” (김요한 목사)</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="font-semibold text-gray-700">축도</span>
+              <span class="text-gray-500">김요한 군종목사</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-50 p-4 border-t border-gray-200 flex justify-end gap-3">
+        <button onclick="showToast('주보 PDF 다운로드가 시작되었습니다.', 'success')" class="px-4 py-2 rounded-xl bg-navy-900 text-gold-400 text-xs font-bold hover:bg-navy-800 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-download"></i> PDF 다운로드
+        </button>
+        <button onclick="closeBulletinModal()" class="px-4 py-2 rounded-xl bg-gray-200 text-gray-700 text-xs font-semibold hover:bg-gray-300 transition">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 훈련생 응원 편지 작성 모달 -->
+  <div id="letter-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+      <div class="bg-navy-950 text-white p-4 flex justify-between items-center border-b border-navy-800">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-envelope-open-text text-rose-400"></i>
+          <span class="font-bold text-sm">훈련생 응원 & 기도 편지 보내기</span>
+        </div>
+        <button onclick="closeLetterModal()" class="text-gray-400 hover:text-white text-xl">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="letter-form" onsubmit="submitLetter(event)" class="p-6 space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">받는 후보생 / 장병 이름 *</label>
+          <input type="text" id="letter-recipient" required placeholder="예: 김민석 후보생 (ROTC 64기)" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-navy-900">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">소속 부대 / 교육여단 *</label>
+          <input type="text" id="letter-unit" required placeholder="예: 교육여단 2대대 3중대 1소대" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-navy-900">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">보내는 분 성함 *</label>
+            <input type="text" id="letter-sender" required placeholder="예: 어머니 이혜숙" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-navy-900">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">관계 *</label>
+            <select id="letter-relation" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-navy-900">
+              <option value="가족(부모/형제)">가족 (부모/형제)</option>
+              <option value="친구/선후배">친구 / 동기 / 선후배</option>
+              <option value="출석교회 성도">출석교회 성도 / 목회자</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">응원 메시지 & 기도제목 *</label>
+          <textarea id="letter-content" required rows="4" placeholder="훈련 중인 후보생에게 힘이 되는 따뜻한 응원의 말씀이나 성경 구절을 남겨주세요." class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-navy-900"></textarea>
+        </div>
+        <div class="flex items-center gap-2 pt-2">
+          <input type="checkbox" id="letter-private" class="rounded text-navy-900">
+          <label for="letter-private" class="text-gray-600">비공개 편지로 전달 (주일 예배 시 해당 후보생에게만 출력 전달)</label>
+        </div>
+        <div class="pt-4 flex justify-end gap-2">
+          <button type="button" onclick="closeLetterModal()" class="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 font-semibold">취소</button>
+          <button type="submit" class="px-5 py-2 rounded-lg bg-navy-900 text-white font-bold hover:bg-navy-800 transition">편지 접수하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+  <script>
+    function openBulletinModal() {
+      document.getElementById("bulletin-modal").classList.remove("hidden");
+    }
+    function closeBulletinModal() {
+      document.getElementById("bulletin-modal").classList.add("hidden");
+    }
+    function openLetterModal() {
+      document.getElementById("letter-modal").classList.remove("hidden");
+    }
+    function closeLetterModal() {
+      document.getElementById("letter-modal").classList.add("hidden");
+    }
+
+    async function submitLetter(e) {
+      e.preventDefault();
+      const payload = {
+        recipient_name: document.getElementById("letter-recipient").value,
+        recipient_unit: document.getElementById("letter-unit").value,
+        sender_name: document.getElementById("letter-sender").value,
+        sender_relation: document.getElementById("letter-relation").value,
+        content: document.getElementById("letter-content").value,
+        is_private: document.getElementById("letter-private").checked
+      };
+
+      try {
+        const res = await fetch("/api/letters", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, "success");
+          closeLetterModal();
+          document.getElementById("letter-form").reset();
+        } else {
+          showToast(data.detail || "오류가 발생했습니다.", "error");
+        }
+      } catch (err) {
+        showToast("서버와 통신할 수 없습니다.", "error");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>군선교 후원 안내 | 육군학생군사학교 문무대교회</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-[#faf9f6] text-gray-800 antialiased flex flex-col min-h-screen">
+
+  <!-- 헤더 -->
+  <nav class="bg-white/95 backdrop-blur border-b border-gray-200 sticky top-0 z-50">
+    <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center h-20">
+      <a href="/" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#0f1d38] text-[#f5d77f] flex items-center justify-center text-lg shadow">
+          <i class="fa-solid fa-cross"></i>
+        </div>
+        <div>
+          <span class="text-xs font-semibold text-gray-500 uppercase block">Cadet Military School Church</span>
+          <span class="text-lg font-bold text-[#0f1d38] font-serif-kr">문무대교회 후원센터</span>
+        </div>
+      </a>
+      <div class="flex items-center gap-4 text-sm font-medium">
+        <a href="/" class="text-gray-600 hover:text-navy-900"><i class="fa-solid fa-house mr-1"></i> 메인으로</a>
+        <a href="/admin" class="text-gray-400 hover:text-gray-600 text-xs"><i class="fa-solid fa-lock mr-1"></i>관리자</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 서브 히어로 -->
+  <header class="bg-[#0f1d38] text-white py-14 px-4 relative overflow-hidden">
+    <div class="container mx-auto px-4 lg:px-8 relative z-10 max-w-4xl text-center">
+      <span class="px-3 py-1 rounded-full bg-gold-500/20 text-[#f5d77f] text-xs font-semibold border border-gold-500/30 mb-4 inline-block">
+        <i class="fa-solid fa-heart-pulse mr-1"></i> 한 생명을 구하는 청년 장교 복음화
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-bold font-serif-kr mb-3">군선교 헌금 및 후원 안내</h1>
+      <p class="text-gray-300 text-sm max-w-2xl mx-auto leading-relaxed">
+        보내주시는 귀한 정성은 훈련 후보생들의 간식비, 진중세례 및 신앙도서 보급에 전액 투명하게 사용됩니다.<br>
+        입금 후 <strong>입금 알림</strong>을 남겨주시면 담당 교역자에게 실시간 알림이 전송됩니다.
+      </p>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐트 -->
+  <main class="container mx-auto px-4 lg:px-8 py-12 flex-1 max-w-5xl">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- 좌측: 후원 계좌 목록 -->
+      <div class="lg:col-span-5 space-y-4">
+        <div class="flex items-center justify-between pb-2 border-b border-gray-200">
+          <h2 class="text-lg font-bold text-navy-950 font-serif-kr">공식 후원 계좌 목록</h2>
+          <span class="text-xs text-gray-500">원클릭 복사 지원</span>
+        </div>
+
+        <!-- 농협 -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden group">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-emerald-800 text-sm flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> 농협은행 (일반 사역)
+            </span>
+            <span class="text-[11px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-semibold">대표 계좌</span>
+          </div>
+          <div class="font-mono text-xl font-extrabold text-navy-950 mb-1 select-all tracking-wider">
+            301-0284-5912-71
+          </div>
+          <div class="text-xs text-gray-500 mb-3">예금주: 육군학생군사학교 문무대교회</div>
+          <button onclick="copyAccount('301-0284-5912-71', '농협은행')" class="w-full py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 text-emerald-700 font-bold text-xs border border-gray-200 transition flex items-center justify-center gap-1.5">
+            <i class="fa-regular fa-copy"></i> 계좌번호 복사하기
+          </button>
+        </div>
+
+        <!-- 국민 -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden group">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-amber-800 text-sm flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> 국민은행 (훈련생 간식)
+            </span>
+            <span class="text-[11px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded font-semibold">입영훈련 전용</span>
+          </div>
+          <div class="font-mono text-xl font-extrabold text-navy-950 mb-1 select-all tracking-wider">
+            488401-01-382910
+          </div>
+          <div class="text-xs text-gray-500 mb-3">예금주: 육군학생군사학교 문무대교회</div>
+          <button onclick="copyAccount('488401-01-382910', '국민은행')" class="w-full py-2 rounded-xl bg-gray-50 hover:bg-amber-50 text-amber-700 font-bold text-xs border border-gray-200 transition flex items-center justify-center gap-1.5">
+            <i class="fa-regular fa-copy"></i> 계좌번호 복사하기
+          </button>
+        </div>
+
+        <!-- 신한 -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm relative overflow-hidden group">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-blue-800 text-sm flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> 신한은행 (진중세례 장학)
+            </span>
+            <span class="text-[11px] bg-blue-50 text-blue-700 px-2 py-0.5 rounded font-semibold">세례 지원</span>
+          </div>
+          <div class="font-mono text-xl font-extrabold text-navy-950 mb-1 select-all tracking-wider">
+            100-032-948123
+          </div>
+          <div class="text-xs text-gray-500 mb-3">예금주: 육군학생군사학교 문무대교회</div>
+          <button onclick="copyAccount('100-032-948123', '신한은행')" class="w-full py-2 rounded-xl bg-gray-50 hover:bg-blue-50 text-blue-700 font-bold text-xs border border-gray-200 transition flex items-center justify-center gap-1.5">
+            <i class="fa-regular fa-copy"></i> 계좌번호 복사하기
+          </button>
+        </div>
+
+        <!-- 세액공제 안내 카드 -->
+        <div class="bg-navy-900 text-white p-5 rounded-2xl border border-navy-800 text-xs space-y-2">
+          <h4 class="font-bold text-gold-400 flex items-center gap-1.5 text-sm">
+            <i class="fa-solid fa-receipt"></i> 기부금 영수증 발급 안내
+          </h4>
+          <p class="text-gray-300 leading-relaxed">
+            문무대교회는 군선교 사역 단체로서 연말정산 시 법정 기부금 세액공제 혜택(소득세법 제34조)을 받으실 수 있습니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 우측: 후원금 입금 확인 알림 전송 폼 (사용자 요구사항) -->
+      <div class="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl border border-gray-200 shadow-sm">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
+          <span class="text-xs font-bold text-emerald-600">실시간 교역자 알림 연동</span>
+        </div>
+        <h2 class="text-xl font-bold text-navy-950 font-serif-kr mb-2">후원금 입금 알림 전송</h2>
+        <p class="text-xs text-gray-500 mb-6">
+          계좌로 송금하신 후 아래 폼을 작성해 주시면, 담임목사님과 재정 담당자에게 <strong>즉시 실시간 알림</strong>이 전송됩니다.
+        </p>
+
+        <form id="donation-notify-form" onsubmit="submitDonationNotify(event)" class="space-y-4 text-xs sm:text-sm">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">입금자 성함 (또는 교회/단체명) *</label>
+              <input type="text" id="d-name" required placeholder="예: 김성도 (서울은혜교회)" class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-[#0f1d38] outline-none">
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">후원 입금 금액 (원) *</label>
+              <input type="number" id="d-amount" required min="1000" step="1000" placeholder="예: 100000" class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-[#0f1d38] outline-none font-bold">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">입금하신 은행 *</label>
+              <select id="d-bank" class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-[#0f1d38] outline-none font-medium">
+                <option value="농협은행 (301-0284-5912-71)">농협은행 (301-0284-5912-71)</option>
+                <option value="국민은행 (488401-01-382910)">국민은행 (488401-01-382910)</option>
+                <option value="신한은행 (100-032-948123)">신한은행 (100-032-948123)</option>
+                <option value="기타/타행송금">기타 은행에서 송금</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-bold text-gray-700 mb-1">후원 목적</label>
+              <select id="d-purpose" class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-[#0f1d38] outline-none font-medium">
+                <option value="일반 선교 및 목회 후원">일반 선교 및 목회 후원</option>
+                <option value="하계/동계 훈련생 간식비 후원">하계/동계 훈련생 간식비 후원</option>
+                <option value="진중세례식 지원 헌금">진중세례식 지원 헌금</option>
+                <option value="기독 간부 양성 장학금">기독 간부 양성 장학금</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">연락처 (감사 문자 및 영수증 안내용)</label>
+            <input type="tel" id="d-phone" placeholder="010-0000-0000" class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-[#0f1d38] outline-none">
+          </div>
+
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">응원 메시지 / 기도제목</label>
+            <textarea id="d-memo" rows="3" placeholder="문무대교회 사역자들과 훈련 후보생들을 향한 따뜻한 격려의 말씀을 적어주세요." class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-[#0f1d38] outline-none"></textarea>
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <input type="checkbox" id="d-receipt" class="rounded w-4 h-4 text-navy-900">
+            <label for="d-receipt" class="text-gray-700 font-semibold cursor-pointer text-xs">
+              기부금 영수증(세액공제용) 발급을 희망합니다.
+            </label>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-[#0f1d38] hover:bg-[#1a2f57] text-white font-bold shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
+            <i class="fa-solid fa-bell text-gold-400"></i>
+            <span>입금 확인 알림 전송하기</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="bg-[#0f1d38] text-gray-400 text-xs py-8 text-center border-t border-navy-900 mt-auto">
+    <p>© 2026 육군학생군사학교 문무대교회 재정실. 문의 043-830-1004</p>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  <script>
+    async function submitDonationNotify(e) {
+      e.preventDefault();
+      const payload = {
+        donor_name: document.getElementById("d-name").value,
+        amount: parseInt(document.getElementById("d-amount").value, 10),
+        bank: document.getElementById("d-bank").value,
+        purpose: document.getElementById("d-purpose").value,
+        phone: document.getElementById("d-phone").value || null,
+        memo: document.getElementById("d-memo").value || null,
+        receipt_requested: document.getElementById("d-receipt").checked
+      };
+
+      try {
+        const res = await fetch("/api/donations/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(data.message, "success");
+          document.getElementById("donation-notify-form").reset();
+        } else {
+          showToast("알림 전송 중 오류가 발생했습니다.", "error");
+        }
+      } catch (err) {
+        showToast("서버와 통신할 수 없습니다.", "error");
+      }
+    }
+  </script>
+</body>
+</html>

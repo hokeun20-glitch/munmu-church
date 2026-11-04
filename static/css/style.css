@@ -1,0 +1,143 @@
+/* 문무대교회 디자인 시스템 스타일시트 */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700&display=swap');
+
+:root {
+  --primary-navy: #0f1d38;
+  --primary-deep: #0a1324;
+  --accent-gold: #c59b27;
+  --accent-gold-light: #f3e5ab;
+  --accent-gold-dark: #9a7618;
+  --bg-cream: #faf9f6;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --border-light: #e5e7eb;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  color: var(--text-main);
+  background-color: var(--bg-cream);
+  overflow-x: hidden;
+}
+
+.font-serif-kr {
+  font-family: 'Noto Serif KR', serif;
+}
+
+/* 성스러운 금빛 그라데이션 */
+.gold-gradient {
+  background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #f5d77f 0%, #d4af37 50%, #aa7c11 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.navy-gradient {
+  background: linear-gradient(135deg, #0f1d38 0%, #1a2f57 100%);
+}
+
+/* 부드러운 스크롤 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 커스텀 스크롤바 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 토스트 알림창 애니메이션 */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  min-width: 280px;
+  max-width: 400px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background-color: #1e293b;
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.95rem;
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: all 0.3s ease;
+}
+
+.toast.toast-success {
+  border-left: 4px solid #10b981;
+}
+
+.toast.toast-error {
+  border-left: 4px solid #ef4444;
+}
+
+.toast.toast-info {
+  border-left: 4px solid #3b82f6;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* 빛나는 십자가/버튼 펄스 효과 */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 3s infinite ease-in-out;
+}
+
+/* 이미지 호버 줌 */
+.zoom-card {
+  overflow: hidden;
+}
+.zoom-card img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.zoom-card:hover img {
+  transform: scale(1.05);
+}
+
+/* 모달 오버레이 */
+.modal-overlay {
+  background-color: rgba(15, 29, 56, 0.75);
+  backdrop-filter: blur(4px);
+}

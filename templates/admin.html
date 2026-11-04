@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>군종행정 통합 관리자 대시보드 | 문무대교회</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="bg-gray-100 text-gray-800 antialiased flex flex-col min-h-screen">
+
+  <!-- 1. 로그인 전 화면 -->
+  <div id="login-section" class="flex-1 flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-2xl p-8 border border-gray-200 shadow-xl space-y-6">
+      <div class="text-center">
+        <div class="w-14 h-14 rounded-2xl bg-navy-950 text-gold-400 flex items-center justify-center text-2xl mx-auto mb-3 shadow">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h1 class="text-xl font-bold text-navy-950 font-serif-kr">문무대교회 군종행정 관리자</h1>
+        <p class="text-xs text-gray-500 mt-1">상담, 위문 일정, 행사 접수, 후원금 통합 관리 시스템</p>
+      </div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4 text-xs sm:text-sm">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">관리자 아이디</label>
+          <input type="text" id="admin-id" required value="admin" class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-navy-900 outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">비밀번호</label>
+          <input type="password" id="admin-pw" required value="munmu1234!" class="w-full px-3 py-2.5 border rounded-xl focus:ring-2 focus:ring-navy-900 outline-none">
+          <span class="text-[11px] text-gray-400 mt-1 block">기본 관리자 계정이 자동으로 입력되어 있습니다.</span>
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-navy-950 text-white font-bold hover:bg-navy-900 transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket text-gold-400"></i>
+          <span>대시보드 로그인</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. 로그인 후 메인 대시보드 -->
+  <div id="dashboard-section" class="hidden flex-1 flex flex-col">
+    
+    <!-- 관리자 상단 네비게이션 바 -->
+    <header class="bg-navy-950 text-white sticky top-0 z-40 border-b border-navy-800">
+      <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-cross text-gold-400 text-lg"></i>
+          <span class="font-bold text-sm sm:text-base font-serif-kr">문무대교회 군종행정 포털</span>
+          <span class="text-xs bg-navy-800 text-gold-400 px-2 py-0.5 rounded border border-navy-700">관리자 모드</span>
+        </div>
+        
+        <div class="flex items-center gap-4 text-xs">
+          <a href="/" target="_blank" class="text-gray-300 hover:text-white transition flex items-center gap-1">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> 사용자 웹사이트 보기
+          </a>
+          <button onclick="handleLogout()" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-gray-300 transition">
+            <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> 로그아웃
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto px-4 lg:px-8 py-8 flex-1 max-w-7xl">
+      
+      <!-- 상단 요약 카드 지표 -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        
+        <!-- 상담 대기 -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 font-semibold block mb-1">목양상담 대기</span>
+            <span class="text-2xl font-extrabold text-navy-950" id="stat-counseling">0</span>
+            <span class="text-xs text-gray-400 block mt-0.5">신규 접수 건수</span>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+        </div>
+
+        <!-- 위문 신청 대기 -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 font-semibold block mb-1">위문 신청 심의</span>
+            <span class="text-2xl font-extrabold text-amber-600" id="stat-consolation">0</span>
+            <span class="text-xs text-gray-400 block mt-0.5">검토 대기 중</span>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-people-group"></i>
+          </div>
+        </div>
+
+        <!-- 미확인 후원금 -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 font-semibold block mb-1">후원금 입금 알림</span>
+            <span class="text-2xl font-extrabold text-emerald-600" id="stat-donation">0</span>
+            <span class="text-xs text-gray-400 block mt-0.5" id="stat-donation-amount">0원</span>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+        </div>
+
+        <!-- 행사 참가자 총합 -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
+          <div>
+            <span class="text-xs text-gray-500 font-semibold block mb-1">행사 총 등록자</span>
+            <span class="text-2xl font-extrabold text-purple-600" id="stat-events">0</span>
+            <span class="text-xs text-gray-400 block mt-0.5">진중세례 및 행사</span>
+          </div>
+          <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl">
+            <i class="fa-solid fa-water"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 4대 탭 메뉴 -->
+      <div class="flex border-b border-gray-200 mb-6 space-x-2 overflow-x-auto text-xs sm:text-sm font-bold">
+        <button onclick="switchAdminTab('counseling')" id="atab-counseling" class="px-5 py-3 border-b-2 border-navy-950 text-navy-950 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-user-doctor text-gold-600"></i> 목양상담 접수 관리
+        </button>
+        <button onclick="switchAdminTab('consolation')" id="atab-consolation" class="px-5 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-calendar-check text-gold-600"></i> 위문 일정 중복 & 승인 관리
+        </button>
+        <button onclick="switchAdminTab('donation')" id="atab-donation" class="px-5 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-bell text-gold-600"></i> 후원금 실시간 입금 확인
+        </button>
+        <button onclick="switchAdminTab('events')" id="atab-events" class="px-5 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-list-check text-gold-600"></i> 행사별 참가자 명단
+        </button>
+      </div>
+
+      <!-- 탭 1: 목양상담 관리 -->
+      <section id="panel-counseling" class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+          <h3 class="font-bold text-navy-950 text-base">목양상담 신청 목록</h3>
+          <span class="text-xs text-gray-500">구글 캘린더 등록 및 상담 상태 업데이트</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-500 uppercase border-b border-gray-200">
+              <tr>
+                <th class="p-3">일시</th>
+                <th class="p-3">신청자</th>
+                <th class="p-3">소속/연락처</th>
+                <th class="p-3">분야</th>
+                <th class="p-3">상담 내용</th>
+                <th class="p-3">상태</th>
+                <th class="p-3">구글 캘린더</th>
+                <th class="p-3">관리</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-counseling" class="divide-y divide-gray-100">
+              <!-- 동적 데이터 -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 탭 2: 위문 관리 -->
+      <section id="panel-consolation" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+          <h3 class="font-bold text-navy-950 text-base">위문 방문 신청 및 부대 승인 관리</h3>
+          <span class="text-xs text-gray-500">동일 일자 중복 방지 및 출입 차량 관리</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-500 uppercase border-b border-gray-200">
+              <tr>
+                <th class="p-3">방문 일자/시간</th>
+                <th class="p-3">단체명</th>
+                <th class="p-3">대표자/연락처</th>
+                <th class="p-3">인원</th>
+                <th class="p-3">지원 물품</th>
+                <th class="p-3">차량 번호</th>
+                <th class="p-3">상태</th>
+                <th class="p-3">관리</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-consolation" class="divide-y divide-gray-100">
+              <!-- 동적 데이터 -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 탭 3: 후원금 관리 -->
+      <section id="panel-donation" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
+          <h3 class="font-bold text-navy-950 text-base">후원금 입금 알림 내역</h3>
+          <span class="text-xs text-gray-500">실시간 통보 및 확인 완료 처리</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-500 uppercase border-b border-gray-200">
+              <tr>
+                <th class="p-3">접수 일시</th>
+                <th class="p-3">입금자명</th>
+                <th class="p-3">입금 금액</th>
+                <th class="p-3">입금 은행</th>
+                <th class="p-3">후원 목적</th>
+                <th class="p-3">연락처/메모</th>
+                <th class="p-3">영수증 요청</th>
+                <th class="p-3">상태</th>
+                <th class="p-3">확인</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-donation" class="divide-y divide-gray-100">
+              <!-- 동적 데이터 -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 탭 4: 행사 참가자 관리 -->
+      <section id="panel-events" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex flex-wrap justify-between items-center gap-3">
+          <div>
+            <h3 class="font-bold text-navy-950 text-base">행사별 참가 등록자 명단</h3>
+            <span class="text-xs text-gray-500">진중세례 및 특별집회 등록 인원 확인</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="event-select-dropdown" onchange="loadEventAttendees(this.value)" class="px-3 py-1.5 border rounded-lg text-xs font-bold bg-white">
+              <option value="1">2026 하계 ROTC 후보생 진중세례 및 성찬예배</option>
+              <option value="2">문무대 찬양의 밤 및 청년장교 영성캠프</option>
+              <option value="3">전국 학군단 기독동문회 초청 위문예배</option>
+            </select>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-gray-50 text-gray-500 uppercase border-b border-gray-200">
+              <tr>
+                <th class="p-3">No</th>
+                <th class="p-3">성함</th>
+                <th class="p-3">연락처</th>
+                <th class="p-3">소속</th>
+                <th class="p-3">계급/직분</th>
+                <th class="p-3">동반 인원</th>
+                <th class="p-3">비고/세례여부</th>
+                <th class="p-3">신청일시</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-event-attendees" class="divide-y divide-gray-100">
+              <!-- 동적 데이터 -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+  <script>
+    let isLogged = false;
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const id = document.getElementById("admin-id").value;
+      const pw = document.getElementById("admin-pw").value;
+
+      fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: id, password: pw })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          isLogged = true;
+          document.getElementById("login-section").classList.add("hidden");
+          document.getElementById("dashboard-section").classList.remove("hidden");
+          showToast("관리자 대시보드에 로그인되었습니다.", "success");
+          loadDashboardSummary();
+          loadCounselings();
+        } else {
+          showToast(data.detail || "로그인 실패", "error");
+        }
+      })
+      .catch(() => showToast("서버 통신 실패", "error"));
+    }
+
+    function handleLogout() {
+      isLogged = false;
+      document.getElementById("login-section").classList.remove("hidden");
+      document.getElementById("dashboard-section").classList.add("hidden");
+      showToast("로그아웃되었습니다.", "info");
+    }
+
+    async function loadDashboardSummary() {
+      try {
+        const res = await fetch("/api/admin/dashboard");
+        const data = await res.json();
+        document.getElementById("stat-counseling").innerText = data.pending_counseling;
+        document.getElementById("stat-consolation").innerText = data.pending_consolations;
+        document.getElementById("stat-donation").innerText = data.pending_donations;
+        document.getElementById("stat-donation-amount").innerText = `${data.pending_donation_amount.toLocaleString()}원`;
+        document.getElementById("stat-events").innerText = data.total_event_registrations;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    function switchAdminTab(tab) {
+      ['counseling', 'consolation', 'donation', 'events'].forEach(t => {
+        const panel = document.getElementById(`panel-${t}`);
+        const btn = document.getElementById(`atab-${t}`);
+        if (t === tab) {
+          panel.classList.remove("hidden");
+          btn.className = "px-5 py-3 border-b-2 border-navy-950 text-navy-950 flex items-center gap-1.5 transition";
+        } else {
+          panel.classList.add("hidden");
+          btn.className = "px-5 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition";
+        }
+      });
+
+      if (tab === 'counseling') loadCounselings();
+      if (tab === 'consolation') loadConsolations();
+      if (tab === 'donation') loadDonations();
+      if (tab === 'events') loadEventAttendees(document.getElementById("event-select-dropdown").value);
+    }
+
+    async function loadCounselings() {
+      const tbody = document.getElementById("tbody-counseling");
+      try {
+        const res = await fetch("/api/admin/counselings");
+        const data = await res.json();
+        tbody.innerHTML = data.counselings.map(item => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 font-semibold">${item.date}<br><span class="text-gray-400 text-[11px]">${item.time_slot}</span></td>
+            <td class="p-3 font-bold text-navy-900">${item.name} ${item.is_anonymous ? '<span class="text-[10px] bg-gray-200 px-1 py-0.5 rounded text-gray-600">익명</span>' : ''}</td>
+            <td class="p-3">${item.phone}<br><span class="text-gray-400 text-[11px]">${item.affiliation || '-'}</span></td>
+            <td class="p-3 font-semibold text-blue-700">${item.category}</td>
+            <td class="p-3 max-w-xs truncate" title="${item.message}">${item.message}</td>
+            <td class="p-3 font-bold ${item.status === '신청완료' ? 'text-amber-600' : 'text-emerald-600'}">${item.status}</td>
+            <td class="p-3">
+              <a href="${item.google_event_link}" target="_blank" class="px-2.5 py-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold text-[11px] inline-flex items-center gap-1">
+                <i class="fa-brands fa-google"></i> 등록 링크
+              </a>
+            </td>
+            <td class="p-3 space-x-1">
+              <button onclick="updateCounselingStatus(${item.id}, '상담확정')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">확정</button>
+              <button onclick="updateCounselingStatus(${item.id}, '상담완료')" class="px-2 py-1 bg-gray-700 hover:bg-gray-800 text-white rounded text-[10px] font-bold">완료</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function updateCounselingStatus(id, status) {
+      const note = prompt("목사님 코멘트 또는 상담 안내 사항을 입력하세요:", status === '상담확정' ? "상담이 확정되었습니다. 약속된 시간에 목양실로 방문 바랍니다." : "");
+      if (note === null) return;
+
+      const res = await fetch(`/api/admin/counselings/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: status, admin_notes: note })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast("상태가 업데이트되었습니다.", "success");
+        loadCounselings();
+        loadDashboardSummary();
+      }
+    }
+
+    async function loadConsolations() {
+      const tbody = document.getElementById("tbody-consolation");
+      try {
+        const res = await fetch("/api/admin/consolations");
+        const data = await res.json();
+        tbody.innerHTML = data.consolations.map(item => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 font-semibold">${item.visit_date}<br><span class="text-gray-400 text-[11px]">${item.visit_time}</span></td>
+            <td class="p-3 font-bold text-navy-900">${item.group_name}</td>
+            <td class="p-3">${item.leader_name} (${item.leader_phone})</td>
+            <td class="p-3 font-bold">${item.num_attendees}명</td>
+            <td class="p-3 max-w-xs truncate" title="${item.items_summary}">${item.items_summary}</td>
+            <td class="p-3 max-w-xs truncate font-mono text-[11px]" title="${item.vehicle_numbers}">${item.vehicle_numbers}</td>
+            <td class="p-3 font-bold ${item.status === '승인완료' ? 'text-emerald-600' : 'text-amber-600'}">${item.status}</td>
+            <td class="p-3 space-x-1">
+              <button onclick="updateConsolationStatus(${item.id}, '승인완료')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">승인</button>
+              <button onclick="updateConsolationStatus(${item.id}, '일정조율')" class="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded text-[10px] font-bold">조율</button>
+              <button onclick="updateConsolationStatus(${item.id}, '반려')" class="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold">반려</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function updateConsolationStatus(id, status) {
+      const memo = prompt("행정 메모(위병소 통보 사항, 사용 장소 등)를 입력하세요:", status === '승인완료' ? "위병소 출입 통보 완료 / 친교실 사용 승인" : "");
+      if (memo === null) return;
+
+      const res = await fetch(`/api/admin/consolations/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: status, admin_notes: memo })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast("위문 상태가 업데이트되었습니다.", "success");
+        loadConsolations();
+        loadDashboardSummary();
+      }
+    }
+
+    async function loadDonations() {
+      const tbody = document.getElementById("tbody-donation");
+      try {
+        const res = await fetch("/api/admin/donations");
+        const data = await res.json();
+        tbody.innerHTML = data.donations.map(item => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 text-gray-500">${item.created_at}</td>
+            <td class="p-3 font-bold text-navy-900">${item.donor_name}</td>
+            <td class="p-3 font-mono font-bold text-emerald-700">${item.amount.toLocaleString()}원</td>
+            <td class="p-3">${item.bank}</td>
+            <td class="p-3 font-semibold">${item.purpose}</td>
+            <td class="p-3 text-gray-500">${item.phone || '-'} / ${item.memo || '-'}</td>
+            <td class="p-3">${item.receipt_requested ? '<span class="text-rose-600 font-bold">요청</span>' : '-'}</td>
+            <td class="p-3 font-bold ${item.status === '입금확인완료' ? 'text-emerald-600' : 'text-amber-600'}">${item.status}</td>
+            <td class="p-3">
+              ${item.status === '확인대기' ? `
+                <button onclick="confirmDonation(${item.id})" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">확인</button>
+              ` : '<span class="text-gray-400">완료됨</span>'}
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function confirmDonation(id) {
+      if (!confirm("해당 후원금 입금을 확인 완료 처리하시겠습니까?")) return;
+      const res = await fetch(`/api/admin/donations/${id}/confirm`, { method: "PATCH" });
+      const data = await res.json();
+      if (data.success) {
+        showToast("입금 확인 처리되었습니다.", "success");
+        loadDonations();
+        loadDashboardSummary();
+      }
+    }
+
+    async function loadEventAttendees(eventId) {
+      const tbody = document.getElementById("tbody-event-attendees");
+      try {
+        const res = await fetch(`/api/admin/events/${eventId}/registrations`);
+        const data = await res.json();
+        if (data.registrations.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-gray-400">해당 행사에 접수된 참가자가 없습니다.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = data.registrations.map((item, idx) => `
+          <tr class="hover:bg-gray-50">
+            <td class="p-3 text-gray-400 font-mono">${idx + 1}</td>
+            <td class="p-3 font-bold text-navy-900">${item.name}</td>
+            <td class="p-3">${item.phone}</td>
+            <td class="p-3">${item.affiliation || '-'}</td>
+            <td class="p-3 font-semibold text-blue-700">${item.rank_or_role || '-'}</td>
+            <td class="p-3 font-bold text-emerald-700">+${item.companions_count}명</td>
+            <td class="p-3 text-gray-600">${item.memo || '-'}</td>
+            <td class="p-3 text-gray-400">${item.created_at}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  </script>
+</body>
+</html>
