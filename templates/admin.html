@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>군종행정 통합 관리자 대시보드 | 문무대교회</title>
+  <title>군종행정 통합 관리자 포털 | 문무대교회</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/static/css/style.css">
@@ -18,7 +18,7 @@
           <i class="fa-solid fa-lock"></i>
         </div>
         <h1 class="text-xl font-bold text-navy-950 font-serif-kr">문무대교회 군종행정 관리자</h1>
-        <p class="text-xs text-gray-500 mt-1">상담, 위문 일정, 행사 접수, 후원금 통합 관리 시스템</p>
+        <p class="text-xs text-gray-500 mt-1">상담, 위문 일정, 엑셀 출력, 콘텐츠 등록 포털</p>
       </div>
 
       <form onsubmit="handleLogin(event)" class="space-y-4 text-xs sm:text-sm">
@@ -42,18 +42,19 @@
   <!-- 2. 로그인 후 메인 대시보드 -->
   <div id="dashboard-section" class="hidden flex-1 flex flex-col">
     
-    <!-- 관리자 상단 네비게이션 바 -->
     <header class="bg-navy-950 text-white sticky top-0 z-40 border-b border-navy-800">
       <div class="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
         <div class="flex items-center gap-3">
           <i class="fa-solid fa-cross text-gold-400 text-lg"></i>
           <span class="font-bold text-sm sm:text-base font-serif-kr">문무대교회 군종행정 포털</span>
-          <span class="text-xs bg-navy-800 text-gold-400 px-2 py-0.5 rounded border border-navy-700">관리자 모드</span>
+          <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-500/40 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> 실시간 연동 가동중
+          </span>
         </div>
         
         <div class="flex items-center gap-4 text-xs">
           <a href="/" target="_blank" class="text-gray-300 hover:text-white transition flex items-center gap-1">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i> 사용자 웹사이트 보기
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> 사용자 홈페이지
           </a>
           <button onclick="handleLogout()" class="px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-gray-300 transition">
             <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> 로그아웃
@@ -67,7 +68,6 @@
       <!-- 상단 요약 카드 지표 -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         
-        <!-- 상담 대기 -->
         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
           <div>
             <span class="text-xs text-gray-500 font-semibold block mb-1">목양상담 대기</span>
@@ -79,7 +79,6 @@
           </div>
         </div>
 
-        <!-- 위문 신청 대기 -->
         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
           <div>
             <span class="text-xs text-gray-500 font-semibold block mb-1">위문 신청 심의</span>
@@ -91,7 +90,6 @@
           </div>
         </div>
 
-        <!-- 미확인 후원금 -->
         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
           <div>
             <span class="text-xs text-gray-500 font-semibold block mb-1">후원금 입금 알림</span>
@@ -103,7 +101,6 @@
           </div>
         </div>
 
-        <!-- 행사 참가자 총합 -->
         <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
           <div>
             <span class="text-xs text-gray-500 font-semibold block mb-1">행사 총 등록자</span>
@@ -117,7 +114,7 @@
 
       </div>
 
-      <!-- 4대 탭 메뉴 -->
+      <!-- 5대 탭 메뉴 -->
       <div class="flex border-b border-gray-200 mb-6 space-x-2 overflow-x-auto text-xs sm:text-sm font-bold">
         <button onclick="switchAdminTab('counseling')" id="atab-counseling" class="px-5 py-3 border-b-2 border-navy-950 text-navy-950 flex items-center gap-1.5 transition">
           <i class="fa-solid fa-user-doctor text-gold-600"></i> 목양상담 접수 관리
@@ -129,15 +126,20 @@
           <i class="fa-solid fa-bell text-gold-600"></i> 후원금 실시간 입금 확인
         </button>
         <button onclick="switchAdminTab('events')" id="atab-events" class="px-5 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition">
-          <i class="fa-solid fa-list-check text-gold-600"></i> 행사별 참가자 명단
+          <i class="fa-solid fa-list-check text-gold-600"></i> 행사 참가자 명단 (엑셀)
+        </button>
+        <button onclick="switchAdminTab('contents')" id="atab-contents" class="px-5 py-3 border-b-2 border-transparent text-gray-500 hover:text-gray-800 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-cloud-arrow-up text-gold-600"></i> 주보 / 설교 / 사진 업로드
         </button>
       </div>
 
       <!-- 탭 1: 목양상담 관리 -->
       <section id="panel-counseling" class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-          <h3 class="font-bold text-navy-950 text-base">목양상담 신청 목록</h3>
-          <span class="text-xs text-gray-500">구글 캘린더 등록 및 상담 상태 업데이트</span>
+          <div>
+            <h3 class="font-bold text-navy-950 text-base">목양상담 신청 목록</h3>
+            <span class="text-xs text-gray-500">구글 캘린더 자동 연동 및 상태 변경</span>
+          </div>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
@@ -153,18 +155,21 @@
                 <th class="p-3">관리</th>
               </tr>
             </thead>
-            <tbody id="tbody-counseling" class="divide-y divide-gray-100">
-              <!-- 동적 데이터 -->
-            </tbody>
+            <tbody id="tbody-counseling" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- 탭 2: 위문 관리 -->
+      <!-- 탭 2: 위문 관리 (엑셀 다운로드 지원) -->
       <section id="panel-consolation" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-        <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-          <h3 class="font-bold text-navy-950 text-base">위문 방문 신청 및 부대 승인 관리</h3>
-          <span class="text-xs text-gray-500">동일 일자 중복 방지 및 출입 차량 관리</span>
+        <div class="p-5 border-b border-gray-100 flex flex-wrap justify-between items-center gap-3">
+          <div>
+            <h3 class="font-bold text-navy-950 text-base">위문 방문 신청 및 부대 승인 관리</h3>
+            <span class="text-xs text-gray-500">동일 일자 중복 방지 및 출입 차량 관리</span>
+          </div>
+          <button onclick="downloadConsolationsExcel()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+            <i class="fa-regular fa-file-excel"></i> 위병소 출입 차량명부 엑셀 다운로드
+          </button>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
@@ -180,9 +185,7 @@
                 <th class="p-3">관리</th>
               </tr>
             </thead>
-            <tbody id="tbody-consolation" class="divide-y divide-gray-100">
-              <!-- 동적 데이터 -->
-            </tbody>
+            <tbody id="tbody-consolation" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
       </section>
@@ -190,8 +193,10 @@
       <!-- 탭 3: 후원금 관리 -->
       <section id="panel-donation" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="p-5 border-b border-gray-100 flex justify-between items-center">
-          <h3 class="font-bold text-navy-950 text-base">후원금 입금 알림 내역</h3>
-          <span class="text-xs text-gray-500">실시간 통보 및 확인 완료 처리</span>
+          <div>
+            <h3 class="font-bold text-navy-950 text-base">후원금 입금 알림 내역</h3>
+            <span class="text-xs text-gray-500">실시간 통보 및 입금 확인 완료 처리</span>
+          </div>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
@@ -208,14 +213,12 @@
                 <th class="p-3">확인</th>
               </tr>
             </thead>
-            <tbody id="tbody-donation" class="divide-y divide-gray-100">
-              <!-- 동적 데이터 -->
-            </tbody>
+            <tbody id="tbody-donation" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
       </section>
 
-      <!-- 탭 4: 행사 참가자 관리 -->
+      <!-- 탭 4: 행사 참가자 관리 (엑셀 다운로드 지원) -->
       <section id="panel-events" class="hidden bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
         <div class="p-5 border-b border-gray-100 flex flex-wrap justify-between items-center gap-3">
           <div>
@@ -223,11 +226,14 @@
             <span class="text-xs text-gray-500">진중세례 및 특별집회 등록 인원 확인</span>
           </div>
           <div class="flex items-center gap-2">
-            <select id="event-select-dropdown" onchange="loadEventAttendees(this.value)" class="px-3 py-1.5 border rounded-lg text-xs font-bold bg-white">
+            <select id="event-select-dropdown" onchange="loadEventAttendees(this.value)" class="px-3 py-2 border rounded-xl text-xs font-bold bg-white">
               <option value="1">2026 하계 ROTC 후보생 진중세례 및 성찬예배</option>
               <option value="2">문무대 찬양의 밤 및 청년장교 영성캠프</option>
               <option value="3">전국 학군단 기독동문회 초청 위문예배</option>
             </select>
+            <button onclick="downloadEventExcel()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5">
+              <i class="fa-regular fa-file-excel"></i> 참가자 명부 엑셀 다운로드
+            </button>
           </div>
         </div>
         <div class="overflow-x-auto">
@@ -244,19 +250,189 @@
                 <th class="p-3">신청일시</th>
               </tr>
             </thead>
-            <tbody id="tbody-event-attendees" class="divide-y divide-gray-100">
-              <!-- 동적 데이터 -->
-            </tbody>
+            <tbody id="tbody-event-attendees" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
+      </section>
+
+      <!-- 탭 5: 콘텐츠 관리 (주보 / 설교 / 사진 업로드) -->
+      <section id="panel-contents" class="hidden space-y-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- 새 주보 등록 카드 -->
+          <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg mb-3">
+                <i class="fa-regular fa-newspaper"></i>
+              </div>
+              <h4 class="font-bold text-navy-950 text-base mb-1">스마트 주보 등록</h4>
+              <p class="text-xs text-gray-500 mb-4">새로운 주차의 주보 이미지 파일을 직접 업로드합니다.</p>
+            </div>
+            <button onclick="openUploadModal('bulletin')" class="w-full py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> 새 주보 업로드
+            </button>
+          </div>
+
+          <!-- 새 설교 영상 등록 카드 -->
+          <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center text-lg mb-3">
+                <i class="fa-brands fa-youtube"></i>
+              </div>
+              <h4 class="font-bold text-navy-950 text-base mb-1">주일 설교 영상 등록</h4>
+              <p class="text-xs text-gray-500 mb-4">유튜브 링크와 성경 본문을 입력하여 메인에 노출합니다.</p>
+            </div>
+            <button onclick="openUploadModal('sermon')" class="w-full py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> 새 설교 등록
+            </button>
+          </div>
+
+          <!-- 갤러리 사진 등록 카드 -->
+          <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg mb-3">
+                <i class="fa-regular fa-images"></i>
+              </div>
+              <h4 class="font-bold text-navy-950 text-base mb-1">갤러리 사진 등록</h4>
+              <p class="text-xs text-gray-500 mb-4">진중세례 및 행사 사진을 직접 업로드하여 보관합니다.</p>
+            </div>
+            <button onclick="openUploadModal('gallery')" class="w-full py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-bold text-xs transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-plus"></i> 사진 업로드
+            </button>
+          </div>
+
+        </div>
+
       </section>
 
     </main>
   </div>
 
+  <!-- 주보 등록 모달 -->
+  <div id="modal-bulletin-upload" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-4 text-xs sm:text-sm">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-base text-navy-950">새 스마트 주보 등록</h3>
+        <button onclick="closeUploadModal('bulletin')" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="submitBulletinForm(event)" class="space-y-3">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">주보 제목 *</label>
+          <input type="text" id="b-title" required placeholder="예: 2026년 11월 둘째 주일 문무대 주보" class="w-full px-3 py-2 border rounded-xl outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">주일 일자 *</label>
+            <input type="date" id="b-date" required class="w-full px-3 py-2 border rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">호수 (권호) *</label>
+            <input type="text" id="b-vol" required placeholder="예: 제2026-45호" class="w-full px-3 py-2 border rounded-xl outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">주보 이미지 파일 (스마트폰 촬영 또는 스캔본)</label>
+          <input type="file" id="b-file" accept="image/*" class="w-full px-3 py-2 border rounded-xl text-xs">
+        </div>
+        <div class="pt-3 flex justify-end gap-2">
+          <button type="button" onclick="closeUploadModal('bulletin')" class="px-4 py-2 bg-gray-200 rounded-xl font-semibold">취소</button>
+          <button type="submit" class="px-5 py-2 bg-navy-900 text-white rounded-xl font-bold">등록하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 설교 등록 모달 -->
+  <div id="modal-sermon-upload" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-4 text-xs sm:text-sm">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-base text-navy-950">주일 설교 영상 등록</h3>
+        <button onclick="closeUploadModal('sermon')" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="submitSermonForm(event)" class="space-y-3">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">설교 제목 *</label>
+          <input type="text" id="s-title" required placeholder="예: 강하고 담대하라 두려워하지 말라" class="w-full px-3 py-2 border rounded-xl outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">설교자 *</label>
+            <input type="text" id="s-preacher" required value="김요한 군종목사" class="w-full px-3 py-2 border rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">선포 일자 *</label>
+            <input type="date" id="s-date" required class="w-full px-3 py-2 border rounded-xl outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">성경 본문 *</label>
+          <input type="text" id="s-scripture" required placeholder="예: 여호수아 1장 7-9절" class="w-full px-3 py-2 border rounded-xl outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">유튜브 링크 또는 영상 ID *</label>
+          <input type="text" id="s-youtube" required placeholder="예: https://www.youtube.com/watch?v=W5qM9uA_g28" class="w-full px-3 py-2 border rounded-xl outline-none">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">설교 요약 *</label>
+          <textarea id="s-desc" rows="2" required placeholder="설교의 핵심 메시지를 2~3줄로 요약해 주세요." class="w-full px-3 py-2 border rounded-xl outline-none"></textarea>
+        </div>
+        <div class="pt-3 flex justify-end gap-2">
+          <button type="button" onclick="closeUploadModal('sermon')" class="px-4 py-2 bg-gray-200 rounded-xl font-semibold">취소</button>
+          <button type="submit" class="px-5 py-2 bg-navy-900 text-white rounded-xl font-bold">등록하기</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 갤러리 등록 모달 -->
+  <div id="modal-gallery-upload" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay">
+    <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl space-y-4 text-xs sm:text-sm">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-base text-navy-950">갤러리 사진 등록</h3>
+        <button onclick="closeUploadModal('gallery')" class="text-gray-400 hover:text-gray-700 text-lg"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="submitGalleryForm(event)" class="space-y-3">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">사진 제목 *</label>
+          <input type="text" id="g-title" required placeholder="예: 2026 하계 ROTC 진중세례식 현장" class="w-full px-3 py-2 border rounded-xl outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">카테고리 *</label>
+            <select id="g-category" class="w-full px-3 py-2 border rounded-xl outline-none">
+              <option value="진중세례">진중세례</option>
+              <option value="주일예배">주일예배</option>
+              <option value="시설전경">시설전경</option>
+              <option value="위문교제">위문교제</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold text-gray-700 mb-1">촬영 일자</label>
+            <input type="date" id="g-date" class="w-full px-3 py-2 border rounded-xl outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">사진 파일 첨부 *</label>
+          <input type="file" id="g-file" accept="image/*" required class="w-full px-3 py-2 border rounded-xl text-xs">
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">간단 설명</label>
+          <input type="text" id="g-desc" placeholder="사진에 대한 설명을 적어주세요." class="w-full px-3 py-2 border rounded-xl outline-none">
+        </div>
+        <div class="pt-3 flex justify-end gap-2">
+          <button type="button" onclick="closeUploadModal('gallery')" class="px-4 py-2 bg-gray-200 rounded-xl font-semibold">취소</button>
+          <button type="submit" class="px-5 py-2 bg-navy-900 text-white rounded-xl font-bold">업로드</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="/static/js/main.js"></script>
   <script>
     let isLogged = false;
+    let alertPollTimer = null;
+    let lastAlertCount = 0;
 
     function handleLogin(e) {
       e.preventDefault();
@@ -277,6 +453,7 @@
           showToast("관리자 대시보드에 로그인되었습니다.", "success");
           loadDashboardSummary();
           loadCounselings();
+          startAlertPolling();
         } else {
           showToast(data.detail || "로그인 실패", "error");
         }
@@ -286,9 +463,25 @@
 
     function handleLogout() {
       isLogged = false;
+      if (alertPollTimer) clearInterval(alertPollTimer);
       document.getElementById("login-section").classList.remove("hidden");
       document.getElementById("dashboard-section").classList.add("hidden");
       showToast("로그아웃되었습니다.", "info");
+    }
+
+    function startAlertPolling() {
+      alertPollTimer = setInterval(async () => {
+        try {
+          const res = await fetch("/api/admin/realtime-alerts");
+          const data = await res.json();
+          if (data.alerts && data.alerts.length > lastAlertCount) {
+            const newAlert = data.alerts[0];
+            showToast(`[실시간 알림] ${newAlert.title}`, "success");
+            loadDashboardSummary();
+          }
+          lastAlertCount = data.alerts ? data.alerts.length : 0;
+        } catch (e) {}
+      }, 8000);
     }
 
     async function loadDashboardSummary() {
@@ -306,7 +499,7 @@
     }
 
     function switchAdminTab(tab) {
-      ['counseling', 'consolation', 'donation', 'events'].forEach(t => {
+      ['counseling', 'consolation', 'donation', 'events', 'contents'].forEach(t => {
         const panel = document.getElementById(`panel-${t}`);
         const btn = document.getElementById(`atab-${t}`);
         if (t === tab) {
@@ -339,7 +532,7 @@
             <td class="p-3 font-bold ${item.status === '신청완료' ? 'text-amber-600' : 'text-emerald-600'}">${item.status}</td>
             <td class="p-3">
               <a href="${item.google_event_link}" target="_blank" class="px-2.5 py-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold text-[11px] inline-flex items-center gap-1">
-                <i class="fa-brands fa-google"></i> 등록 링크
+                <i class="fa-brands fa-google"></i> 일정 열기
               </a>
             </td>
             <td class="p-3 space-x-1">
@@ -474,6 +667,82 @@
         `).join('');
       } catch (e) {
         console.error(e);
+      }
+    }
+
+    // 엑셀 다운로드 함수들 (스프린트 4)
+    function downloadEventExcel() {
+      const eventId = document.getElementById("event-select-dropdown").value;
+      window.location.href = `/api/admin/events/${eventId}/export-excel`;
+      showToast("행사 참가자 명단 엑셀 다운로드가 시작되었습니다.", "success");
+    }
+
+    function downloadConsolationsExcel() {
+      window.location.href = `/api/admin/consolations/export-excel`;
+      showToast("위문 방문 및 출입차량 명부 엑셀 다운로드가 시작되었습니다.", "success");
+    }
+
+    // 모달 관리
+    function openUploadModal(type) {
+      document.getElementById(`modal-${type}-upload`).classList.remove("hidden");
+    }
+    function closeUploadModal(type) {
+      document.getElementById(`modal-${type}-upload`).classList.add("hidden");
+    }
+
+    // 주보 폼 제출
+    async function submitBulletinForm(e) {
+      e.preventDefault();
+      const fd = new FormData();
+      fd.append("title", document.getElementById("b-title").value);
+      fd.append("date", document.getElementById("b-date").value);
+      fd.append("volume_no", document.getElementById("b-vol").value);
+      const file = document.getElementById("b-file").files[0];
+      if (file) fd.append("image", file);
+
+      const res = await fetch("/api/admin/bulletins", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message, "success");
+        closeUploadModal("bulletin");
+      }
+    }
+
+    // 설교 폼 제출
+    async function submitSermonForm(e) {
+      e.preventDefault();
+      const fd = new FormData();
+      fd.append("title", document.getElementById("s-title").value);
+      fd.append("preacher", document.getElementById("s-preacher").value);
+      fd.append("date", document.getElementById("s-date").value);
+      fd.append("scripture", document.getElementById("s-scripture").value);
+      fd.append("youtube_id", document.getElementById("s-youtube").value);
+      fd.append("description", document.getElementById("s-desc").value);
+
+      const res = await fetch("/api/admin/sermons", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message, "success");
+        closeUploadModal("sermon");
+      }
+    }
+
+    // 갤러리 폼 제출
+    async function submitGalleryForm(e) {
+      e.preventDefault();
+      const fd = new FormData();
+      fd.append("title", document.getElementById("g-title").value);
+      fd.append("category", document.getElementById("g-category").value);
+      fd.append("date", document.getElementById("g-date").value || "");
+      fd.append("description", document.getElementById("g-desc").value || "");
+      const file = document.getElementById("g-file").files[0];
+      if (file) fd.append("image", file);
+
+      const res = await fetch("/api/admin/gallery", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.success) {
+        showToast(data.message, "success");
+        closeUploadModal("gallery");
       }
     }
   </script>

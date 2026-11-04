@@ -1,11 +1,22 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
+from fastapi.responses import StreamingResponse
+import os
+import uuid
+import aiofiles
+from urllib.parse import quote
 from app.database import get_db
 from app.models import AdminLogin, StatusUpdate
+from app.services.notifier import IN_MEMORY_ALERTS
+from app.services.excel_exporter import export_event_registrations_to_excel, export_consolations_to_excel
 
 router = APIRouter(prefix="/api/admin", tags=["Admin"])
 
 ADMIN_USER = "admin"
 ADMIN_PASS = "munmu1234!"
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/login")
 def admin_login(payload: AdminLogin):
@@ -28,25 +39,20 @@ def get_dashboard_summary():
     with get_db() as conn:
         cursor = conn.cursor()
         
-        # 1. 상담 건수
         cursor.execute("SELECT COUNT(*) FROM counseling_requests WHERE status = '신청완료'")
         pending_counseling = cursor.fetchone()[0]
         
-        # 2. 위문 신청 건수
         cursor.execute("SELECT COUNT(*) FROM consolation_requests WHERE status = '대기중'")
         pending_consolations = cursor.fetchone()[0]
         
-        # 3. 후원금 확인대기 건수
         cursor.execute("SELECT COUNT(*), COALESCE(SUM(amount), 0) FROM donations WHERE status = '확인대기'")
         row = cursor.fetchone()
         pending_donations = row[0]
         pending_donation_amount = row[1]
         
-        # 4. 전체 행사 참가자 수
         cursor.execute("SELECT COUNT(*) FROM event_registrations")
         total_event_registrations = cursor.fetchone()[0]
         
-        # 5. 최근 활동 5건
         cursor.execute("""
             SELECT '상담' as type, name as title, category as subtitle, created_at, status 
             FROM counseling_requests 
@@ -69,6 +75,11 @@ def get_dashboard_summary():
             "total_event_registrations": total_event_registrations,
             "recent_activities": recent_activities
         }
+
+@router.get("/realtime-alerts")
+def get_realtime_alerts():
+    """대시보드 실시간 팝업 알림 폴링 API"""
+    return {"alerts": IN_MEMORY_ALERTS}
 
 @router.get("/counselings")
 def get_all_counselings():
@@ -145,3 +156,165 @@ def get_event_registrations(event_id: int):
         """, (event_id,))
         rows = [dict(r) for r in cursor.fetchall()]
         return {"registrations": rows}
+
+# ==========================================
+# 엑셀 다운로드 엔드포인트 (스프린트 4)
+# ==========================================
+@router.get("/events/{event_id}/export-excel")
+def export_event_excel(event_id: int):
+    """행사 참가자 명단 엑셀(.xlsx) 다운로드"""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT title FROM events WHERE id = ?", (event_id,))
+        event = cursor.fetchone()
+        event_title = event["title"] if event else f"행사_{event_id}"
+
+        cursor.execute("SELECT * FROM event_registrations WHERE event_id = ? ORDER BY id ASC", (event_id,))
+        attendees = [dict(r) for r in cursor.fetchall()]
+
+    excel_stream = export_event_registrations_to_excel(event_title, attendees)
+    encoded_filename = quote(f"문무대교회_{event_title}_명부.xlsx")
+    
+    return StreamingResponse(
+        excel_stream,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}"}
+    )
+
+@router.get("/consolations/export-excel")
+def export_consolations_excel():
+    """위문 단체 및 위병소 출입 차량 명부 엑셀(.xlsx) 다운로드"""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM consolation_requests ORDER BY visit_date ASC, id DESC")
+        rows = [dict(r) for r in cursor.fetchall()]
+
+    excel_stream = export_consolations_to_excel(rows)
+    encoded_filename = quote("문무대교회_위문출입명부.xlsx")
+    
+    return StreamingResponse(
+        excel_stream,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}"}
+    )
+
+# ==========================================
+# 콘텐츠 관리 (주보, 설교, 갤러리 업로드 CRUD)
+# ==========================================
+@router.post("/bulletins")
+async def create_bulletin(
+    title: str = Form(...),
+    date: str = Form(...),
+    volume_no: str = Form(...),
+    image: UploadFile = File(None),
+    image_url: str = Form(None)
+):
+    """새 주보 등록 (파일 업로드 또는 URL)"""
+    saved_url = image_url
+    if image and image.filename:
+        ext = os.path.splitext(image.filename)[1]
+        filename = f"bulletin_{uuid.uuid4().hex}{ext}"
+        filepath = os.path.join(UPLOAD_DIR, filename)
+        
+        async with aiofiles.open(filepath, "wb") as f:
+            content = await image.read()
+            await f.write(content)
+        saved_url = f"/static/uploads/{filename}"
+
+    if not saved_url:
+        saved_url = "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO bulletins (title, date, volume_no, image_url, pdf_url)
+            VALUES (?, ?, ?, ?, '#')
+        """, (title, date, volume_no, saved_url))
+        conn.commit()
+    return {"success": True, "message": "주보가 성공적으로 등록되었습니다."}
+
+@router.delete("/bulletins/{bulletin_id}")
+def delete_bulletin(bulletin_id: int):
+    """주보 삭제"""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM bulletins WHERE id = ?", (bulletin_id,))
+        conn.commit()
+    return {"success": True, "message": "주보가 삭제되었습니다."}
+
+@router.post("/sermons")
+def create_sermon(
+    title: str = Form(...),
+    preacher: str = Form(...),
+    date: str = Form(...),
+    scripture: str = Form(...),
+    youtube_id: str = Form(...),
+    description: str = Form(...)
+):
+    """새 설교 등록"""
+    # youtube_id에 전체 URL이 들어왔을 경우 ID만 추출
+    clean_yt_id = youtube_id
+    if "v=" in clean_yt_id:
+        clean_yt_id = clean_yt_id.split("v=")[1].split("&")[0]
+    elif "youtu.be/" in clean_yt_id:
+        clean_yt_id = clean_yt_id.split("youtu.be/")[1].split("?")[0]
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO sermons (title, preacher, date, scripture, youtube_id, description, views)
+            VALUES (?, ?, ?, ?, ?, ?, 0)
+        """, (title, preacher, date, scripture, clean_yt_id, description))
+        conn.commit()
+    return {"success": True, "message": "설교 영상이 등록되었습니다."}
+
+@router.delete("/sermons/{sermon_id}")
+def delete_sermon(sermon_id: int):
+    """설교 삭제"""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM sermons WHERE id = ?", (sermon_id,))
+        conn.commit()
+    return {"success": True, "message": "설교 영상이 삭제되었습니다."}
+
+@router.post("/gallery")
+async def create_gallery_item(
+    title: str = Form(...),
+    category: str = Form(...),
+    date: str = Form(...),
+    description: str = Form(...),
+    image: UploadFile = File(None),
+    image_url: str = Form(None)
+):
+    """갤러리 사진 등록 (파일 업로드 또는 이미지 URL)"""
+    saved_url = image_url
+    if image and image.filename:
+        ext = os.path.splitext(image.filename)[1]
+        filename = f"gallery_{uuid.uuid4().hex}{ext}"
+        filepath = os.path.join(UPLOAD_DIR, filename)
+        
+        async with aiofiles.open(filepath, "wb") as f:
+            content = await image.read()
+            await f.write(content)
+        saved_url = f"/static/uploads/{filename}"
+
+    if not saved_url:
+        saved_url = "https://images.unsplash.com/photo-1548625361-195fe5795df5?auto=format&fit=crop&w=1200&q=80"
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO gallery_items (title, category, image_url, date, description)
+            VALUES (?, ?, ?, ?, ?)
+        """, (title, category, saved_url, date, description))
+        conn.commit()
+    return {"success": True, "message": "갤러리 사진이 등록되었습니다."}
+
+@router.delete("/gallery/{gallery_id}")
+def delete_gallery_item(gallery_id: int):
+    """갤러리 사진 삭제"""
+    with get_db() as conn:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM gallery_items WHERE id = ?", (gallery_id,))
+        conn.commit()
+    return {"success": True, "message": "사진이 삭제되었습니다."}

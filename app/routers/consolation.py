@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 from app.database import get_db
 from app.models import ConsolationRequestCreate
+from app.services.notifier import notify_new_consolation
 
 router = APIRouter(prefix="/api/consolations", tags=["Consolations"])
 
@@ -19,7 +20,7 @@ def get_booked_dates():
         return {"booked_schedules": rows}
 
 @router.post("/request")
-def request_consolation(payload: ConsolationRequestCreate):
+async def request_consolation(payload: ConsolationRequestCreate, background_tasks: BackgroundTasks):
     """위문 신청 접수 (동일 일자/시간대 중복 방지 검사)"""
     with get_db() as conn:
         cursor = conn.cursor()
@@ -56,6 +57,15 @@ def request_consolation(payload: ConsolationRequestCreate):
         ))
         req_id = cursor.lastrowid
         conn.commit()
+
+        # 관리자 실시간 푸시 알림 (백그라운드)
+        background_tasks.add_task(
+            notify_new_consolation,
+            group_name=payload.group_name,
+            leader=f"{payload.leader_name} ({payload.leader_phone})",
+            visit_date=f"{payload.visit_date} {payload.visit_time}",
+            count=payload.num_attendees
+        )
 
         return {
             "success": True,

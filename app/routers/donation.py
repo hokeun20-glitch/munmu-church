@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, BackgroundTasks
 from app.database import get_db
 from app.models import DonationNotifyCreate
+from app.services.notifier import notify_new_donation
 import os
 
 router = APIRouter(prefix="/api/donations", tags=["Donations"])
@@ -32,7 +33,7 @@ def get_accounts():
     return {"accounts": OFFICIAL_ACCOUNTS}
 
 @router.post("/notify")
-def notify_donation(payload: DonationNotifyCreate):
+async def notify_donation(payload: DonationNotifyCreate, background_tasks: BackgroundTasks):
     """후원금 입금 확인 알림 접수"""
     with get_db() as conn:
         cursor = conn.cursor()
@@ -52,8 +53,14 @@ def notify_donation(payload: DonationNotifyCreate):
         donation_id = cursor.lastrowid
         conn.commit()
 
-        # 실시간 알림 로깅 (향후 텔레그램/슬랙 봇 웹훅 확장 가능)
-        print(f"[후원금 입금 알림] {payload.donor_name}님께서 {payload.amount:,}원 입금 통보 ({payload.bank} / {payload.purpose})")
+        # 백그라운드 태스크로 실시간 푸시 발송
+        background_tasks.add_task(
+            notify_new_donation,
+            donor_name=payload.donor_name,
+            amount=payload.amount,
+            bank=payload.bank,
+            purpose=payload.purpose
+        )
 
         return {
             "success": True,

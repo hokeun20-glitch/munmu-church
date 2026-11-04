@@ -1,8 +1,10 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 from urllib.parse import quote
 from datetime import datetime
 from app.database import get_db
 from app.models import CounselingRequestCreate, CounselingCheck
+from app.services.notifier import notify_new_counseling
+from app.services.google_calendar import create_server_calendar_event, build_google_calendar_url
 
 router = APIRouter(prefix="/api/counseling", tags=["Counseling"])
 
@@ -48,7 +50,7 @@ def get_available_slots():
         return {"slots": rows}
 
 @router.post("/request")
-def request_counseling(payload: CounselingRequestCreate):
+async def request_counseling(payload: CounselingRequestCreate, background_tasks: BackgroundTasks):
     """상담 예약 접수 및 구글 캘린더 링크 생성"""
     with get_db() as conn:
         cursor = conn.cursor()
@@ -60,10 +62,17 @@ def request_counseling(payload: CounselingRequestCreate):
             if not slot or slot["is_available"] == 0:
                 raise HTTPException(status_code=400, detail="이미 예약되었거나 유효하지 않은 상담 시간대입니다.")
         
-        # 구글 캘린더 링크 생성
+        # 구글 캘린더 이벤트 생성 엔진 호출
         cal_title = f"[문무대교회 목양상담] {payload.name} 후보생/성도 상담"
         cal_details = f"신청자: {payload.name}\n연락처: {payload.phone}\n소속: {payload.affiliation or '미기재'}\n상담분야: {payload.category}\n내용: {payload.message}"
-        google_link = generate_google_calendar_link(cal_title, payload.date, payload.time_slot, cal_details)
+        cal_result = create_server_calendar_event(
+            title=cal_title,
+            date_str=payload.date,
+            time_str=payload.time_slot,
+            details=cal_details,
+            attendee_email=payload.email
+        )
+        google_link = cal_result["html_link"]
 
         cursor.execute("""
             INSERT INTO counseling_requests 
@@ -90,6 +99,16 @@ def request_counseling(payload: CounselingRequestCreate):
             cursor.execute("UPDATE counseling_slots SET is_available = 0 WHERE id = ?", (payload.slot_id,))
             
         conn.commit()
+
+        # 백그라운드 실시간 알림 발송
+        background_tasks.add_task(
+            notify_new_counseling,
+            name=payload.name,
+            category=payload.category,
+            date=payload.date,
+            time_slot=payload.time_slot,
+            is_anonymous=payload.is_anonymous
+        )
 
         return {
             "success": True,
