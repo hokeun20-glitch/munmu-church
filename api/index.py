@@ -1,12 +1,15 @@
 import os
 import sys
 
-# 프로젝트 루트 디렉토리를 sys.path에 추가 (Vercel 서버리스 임포트 에러 방지)
+# 프로젝트 루트 디렉토리를 sys.path에 확실하게 추가 (Vercel 서버리스 임포트 에러 원천 방지)
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
+CWD_DIR = os.getcwd()
+
+for p in [ROOT_DIR, CWD_DIR]:
+    if p and p not in sys.path:
+        sys.path.insert(0, p)
 
 from app.main import app
 
-# Vercel ASGI Application 진입점
+# Vercel ASGI Handler
 app = app
