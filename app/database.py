@@ -1,8 +1,20 @@
 import sqlite3
 import os
+import shutil
 from contextlib import contextmanager
 
-DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "munmu_church.db")
+ORIGINAL_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "munmu_church.db")
+
+# Vercel 서버리스 환경 호환성: Vercel에서는 /tmp 경로만 쓰기 가능
+if os.getenv("VERCEL"):
+    DB_PATH = "/tmp/munmu_church.db"
+    if not os.path.exists(DB_PATH) and os.path.exists(ORIGINAL_DB_PATH):
+        try:
+            shutil.copy2(ORIGINAL_DB_PATH, DB_PATH)
+        except Exception:
+            pass
+else:
+    DB_PATH = ORIGINAL_DB_PATH
 
 @contextmanager
 def get_db():
