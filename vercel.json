@@ -1,14 +1,9 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.py": {
-      "includeFiles": "templates/**,static/**,munmu_church.db"
-    }
-  },
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/api/index"
+      "destination": "/api/index.py"
     }
   ]
 }
