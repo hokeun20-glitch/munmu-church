@@ -15,8 +15,14 @@ ADMIN_USER = "admin"
 ADMIN_PASS = "munmu1234!"
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+if os.getenv("VERCEL"):
+    UPLOAD_DIR = "/tmp/uploads"
+else:
+    UPLOAD_DIR = os.path.join(BASE_DIR, "static", "uploads")
+try:
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+except Exception:
+    pass
 
 @router.post("/login")
 def admin_login(payload: AdminLogin):

@@ -1,12 +1,16 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+import os
+import sys
 
-app = FastAPI()
+# 프로젝트 루트 디렉토리를 sys.path에 추가 (Vercel 서버리스 임포트 에러 방지)
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CWD_DIR = os.getcwd()
 
-@app.get("/")
-def home():
-    return HTMLResponse("<h1>문무대교회 Vercel 가동 성공!</h1>")
+for p in [ROOT_DIR, CWD_DIR]:
+    if p and p not in sys.path:
+        sys.path.insert(0, p)
 
-@app.get("/api/health")
-def health():
-    return {"status": "ok", "platform": "Vercel"}
+from app.main import app
+
+# Vercel ASGI Handler (app 및 handler 동시 매핑)
+app = app
+handler = app
