@@ -22,6 +22,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Vercel rewrites(/api/index) 자동 경로 보정 미들웨어
+class VercelPathFixMiddleware:
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] in ("http", "websocket"):
+            path = scope.get("path", "")
+            for prefix in ("/api/index.py", "/api/index"):
+                if path.startswith(prefix):
+                    new_path = path[len(prefix):]
+                    if not new_path or not new_path.startswith("/"):
+                        new_path = "/" + new_path
+                    scope["path"] = new_path
+                    break
+        await self.app(scope, receive, send)
+
+app.add_middleware(VercelPathFixMiddleware)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
@@ -98,8 +117,13 @@ def render_html_page(filename: str) -> HTMLResponse:
 
 # 페이지 라우트
 @app.get("/", response_class=HTMLResponse)
+@app.get("/api/index", response_class=HTMLResponse, include_in_schema=False)
 async def home_page():
     return render_html_page("index.html")
+
+@app.get("/api/health")
+def health_check():
+    return {"status": "ok", "church": "육군학생군사학교 문무대교회", "platform": "Vercel"}
 
 @app.get("/counseling", response_class=HTMLResponse)
 async def counseling_page():
