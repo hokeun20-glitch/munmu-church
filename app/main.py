@@ -83,4 +83,9 @@ async def admin_page():
 
 @app.on_event("startup")
 def on_startup():
-    init_db()
+    try:
+        init_db()
+        from app.seed_data import seed
+        seed()
+    except Exception as e:
+        print(f"[Startup Warning] {e}")

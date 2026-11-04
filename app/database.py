@@ -3,22 +3,24 @@ import os
 import shutil
 from contextlib import contextmanager
 
-ORIGINAL_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "munmu_church.db")
+ORIGINAL_DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "munmu_church.db")
 
-# Vercel 서버리스 환경 호환성: Vercel에서는 /tmp 경로만 쓰기 가능
-if os.getenv("VERCEL"):
-    DB_PATH = "/tmp/munmu_church.db"
-    if not os.path.exists(DB_PATH) and os.path.exists(ORIGINAL_DB_PATH):
-        try:
-            shutil.copy2(ORIGINAL_DB_PATH, DB_PATH)
-        except Exception:
-            pass
-else:
-    DB_PATH = ORIGINAL_DB_PATH
+def get_database_path():
+    """Vercel 서버리스(/tmp 쓰기 전용)와 로컬 환경을 모두 안전하게 지원하는 DB 경로"""
+    if os.getenv("VERCEL"):
+        tmp_db = "/tmp/munmu_church.db"
+        if not os.path.exists(tmp_db) and os.path.exists(ORIGINAL_DB_PATH):
+            try:
+                shutil.copy2(ORIGINAL_DB_PATH, tmp_db)
+            except Exception as e:
+                print(f"[DB Copy Error] {e}")
+        return tmp_db
+    return ORIGINAL_DB_PATH
 
 @contextmanager
 def get_db():
-    conn = sqlite3.connect(DB_PATH)
+    db_file = get_database_path()
+    conn = sqlite3.connect(db_file)
     conn.row_factory = sqlite3.Row
     try:
         yield conn
