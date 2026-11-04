@@ -51,38 +51,49 @@ app.include_router(donation.router)
 app.include_router(church_info.router)
 app.include_router(admin.router)
 
+def render_html_page(filename: str) -> HTMLResponse:
+    """Vercel 서버리스 호환성을 위해 FileResponse 대신 안전한 UTF-8 HTML 문자열 렌더링"""
+    filepath = os.path.join(TEMPLATES_DIR, filename)
+    if os.path.exists(filepath):
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                return HTMLResponse(content=f.read())
+        except Exception as e:
+            return HTMLResponse(content=f"<h3>문무대교회 템플릿 로딩 오류: {e}</h3>", status_code=500)
+    return HTMLResponse(content=f"<h3>페이지를 찾을 수 없습니다: {filename}</h3>", status_code=404)
+
 # 페이지 라우트
 @app.get("/", response_class=HTMLResponse)
 async def home_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "index.html"))
+    return render_html_page("index.html")
 
 @app.get("/counseling", response_class=HTMLResponse)
 async def counseling_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "counseling.html"))
+    return render_html_page("counseling.html")
 
 @app.get("/events", response_class=HTMLResponse)
 async def events_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "events.html"))
+    return render_html_page("events.html")
 
 @app.get("/consolation", response_class=HTMLResponse)
 async def consolation_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "consolation.html"))
+    return render_html_page("consolation.html")
 
 @app.get("/virtual-space", response_class=HTMLResponse)
 async def virtual_space_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "virtual_space.html"))
+    return render_html_page("virtual_space.html")
 
 @app.get("/about", response_class=HTMLResponse)
 async def about_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "about.html"))
+    return render_html_page("about.html")
 
 @app.get("/donation", response_class=HTMLResponse)
 async def donation_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "donation.html"))
+    return render_html_page("donation.html")
 
 @app.get("/admin", response_class=HTMLResponse)
 async def admin_page():
-    return FileResponse(os.path.join(TEMPLATES_DIR, "admin.html"))
+    return render_html_page("admin.html")
 
 @app.on_event("startup")
 def on_startup():
