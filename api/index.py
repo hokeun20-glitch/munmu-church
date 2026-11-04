@@ -1,9 +1,12 @@
-import os
-import sys
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
-# 루트 경로를 파이썬 모듈 검색 경로에 추가
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if ROOT_DIR not in sys.path:
-    sys.path.insert(0, ROOT_DIR)
+app = FastAPI()
 
-from app.main import app
+@app.get("/")
+def home():
+    return HTMLResponse("<h1>문무대교회 Vercel 가동 성공!</h1>")
+
+@app.get("/api/health")
+def health():
+    return {"status": "ok", "platform": "Vercel"}
